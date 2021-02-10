@@ -2,10 +2,12 @@
 
 #include "scroller.h"
 #include "myrand.h"
+#include "score.h"
 
 extern game_state_e game_state;
+
 extern const UBYTE animation[];
-extern UWORD highscore;
+
 extern myrand_state_t r7;
 
 UBYTE scroll_pos_x = 0, scroll_pos_y = 0;

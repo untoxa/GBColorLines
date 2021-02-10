@@ -1,0 +1,37 @@
+#ifndef _PLAYFIELD_H_INCLUDE
+#define _PLAYFIELD_H_INCLUDE
+
+#include <gb/gb.h>
+#include <gb/metasprites.h>
+
+#include "game_types.h"
+#include "myrand.h"
+#include "graphics.h"
+
+extern UBYTE playfield[PLAYFIELD_SIZE];
+extern metasprite_t preview_balls[PREVIEW_SIZE][3];
+
+extern myrand_state_t r7, r81;
+
+extern UBYTE playfield_anim;
+extern const UBYTE animation[];
+
+void playfield_draw();
+void playfield_draw_item(UBYTE x, UBYTE y, UBYTE color);
+
+inline UBYTE playfield_get(UBYTE x, UBYTE y) {
+    return playfield[(y * PLAYFIELD_WIDTH) + x];
+}
+inline void playfield_set(UBYTE x, UBYTE y, UBYTE color) {
+    playfield[(y * PLAYFIELD_WIDTH) + x] = color;
+}
+
+UBYTE playfield_put_item(UWORD idx, UBYTE color);
+
+void playfield_randomize_preview();
+
+void playfield_process_animation(UBYTE anim);
+
+UBYTE playfield_put_random(UBYTE count);
+
+#endif

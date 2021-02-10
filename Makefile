@@ -76,7 +76,7 @@ $(ROM_BUILD_DIR)/%.gb:	$(OBJS)
 
 clean:
 	@echo "CLEANUP..."
-	rm -rf obj/*
+	rm -rf $(OBJDIR)
 	rm -rf $(ROM_BUILD_DIR)
 
 rom: $(TARGET)

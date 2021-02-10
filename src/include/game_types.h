@@ -5,6 +5,9 @@
 #define PLAYFIELD_HEIGHT 9u
 #define PLAYFIELD_SIZE (PLAYFIELD_HEIGHT * PLAYFIELD_WIDTH) 
 
+#define PREVIEW_SIZE 3
+#define SCORE_SIZE 5
+
 #define ANIM_MASK 0x0fu
 
 typedef enum {game_intro, game_play, game_over} game_state_e;
