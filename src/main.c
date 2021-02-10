@@ -60,16 +60,19 @@ UBYTE test_collision(UBYTE x, UBYTE y) {
     return (playfield[(y * PLAYFIELD_WIDTH) + x] == 0);
 }
 
+void clear_viewport() {
+    wait_vbl_done();
+    HIDE_SPRITES; HIDE_BKG;
+    OAM_item_t * ptr = shadow_OAM;
+    for (UBYTE i = 0; i != 40; i++) ptr->y = 0, ptr++;    
+    clear_screen();
+    scroll_reset();
+    SHOW_SPRITES; SHOW_BKG;
+}
 
 game_state_e intro_run() {
     // clear screen;
-    wait_vbl_done();    
-    clear_screen();
-
-    scroll_reset();
-
-    // remove all sprites from screen
-    memset(shadow_OAM, 0, 40 * sizeof(OAM_item_t));
+    clear_viewport();
 
     // display some background
     set_attributed_bkg_tiles(2, 5, 15, 3, intro_map, intro_attr);
@@ -119,12 +122,7 @@ game_state_e intro_run() {
 
 game_state_e over_run() {
     // clear screen;
-    wait_vbl_done();    
-    scroll_reset();
-    clear_screen();
-
-    // remove all sprites from screen
-    memset(shadow_OAM, 0, 40 * sizeof(OAM_item_t));
+    clear_viewport();
 
     // display some background
     set_attributed_bkg_tiles(2, 5, 15, 3, intro_map, intro_attr);
@@ -180,9 +178,6 @@ game_state_e game_run() {
     // reset score
     score = 0; old_score = 1;
 
-    // remove all sprites from screen
-    memset(shadow_OAM, 0, 40 * sizeof(OAM_item_t));
-
     // init random generators
     randomize();
     myrand_init(7, &r7);
@@ -192,9 +187,7 @@ game_state_e game_run() {
     memset(playfield, 0, sizeof(playfield));
     
     // clear screen
-    wait_vbl_done();
-    scroll_reset();
-    clear_screen();
+    clear_viewport();
 
     // draw playfield
     playfield_draw();
