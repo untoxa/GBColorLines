@@ -8,7 +8,7 @@
 UBYTE playfield[PLAYFIELD_SIZE];
 
 UBYTE preview_colors[PREVIEW_SIZE];
-metasprite_t preview_balls[PREVIEW_SIZE][3];
+metasprite_t preview_items[PREVIEW_SIZE][3];
 
 UBYTE playfield_anim = 0;
 
@@ -93,7 +93,7 @@ UBYTE playfield_put_item(UWORD idx, UBYTE color) {
 
 void playfield_randomize_preview() {
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
-        preview_balls[i][1].props = preview_balls[i][0].props = preview_colors[i] = myrand(&r7) + 1; 
+        preview_items[i][1].props = preview_items[i][0].props = preview_colors[i] = myrand(&r7) + 1; 
     }
 }
 
@@ -102,7 +102,7 @@ void playfield_process_animation(UBYTE anim) {
         playfield_anim++; playfield_anim &= ANIM_MASK;
     }
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
-        move_metasprite(preview_balls[i], (preview_colors[i] - 1) << 2, (i << 1) + 4, 151 + animation[(playfield_anim + (i << 1)) & ANIM_MASK], 64 + (i << 4));
+        move_metasprite(preview_items[i], (preview_colors[i] - 1) << 2, (i << 1) + 4, 151 + animation[(playfield_anim + (i << 1)) & ANIM_MASK], 64 + (i << 4));
     }
     if (score != old_score) {
         old_score = score;
@@ -138,7 +138,7 @@ UBYTE playfield_put_random(UBYTE count) {
         }
         if (i < PREVIEW_SIZE) {
             // get colors from preview
-            score_add(playfield_put_item((UWORD)(pf - playfield), preview_balls[i][0].props));       
+            score_add(playfield_put_item((UWORD)(pf - playfield), preview_items[i][0].props));       
         } else {
             // generate random
             score_add(playfield_put_item((UWORD)(pf - playfield), myrand(&r7) + 1));       

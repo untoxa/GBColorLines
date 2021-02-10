@@ -176,7 +176,7 @@ const metasprite_t cursor[] = {
     {metasprite_end}
 };
 
-const metasprite_t ball_defaults[] = { 
+const metasprite_t item_defaults[] = { 
     {0, 0, 0, 0}, 
     {0, 8, 2, 0}, 
     {metasprite_end}

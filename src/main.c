@@ -16,7 +16,7 @@
 
 myrand_state_t r7, r81;
 
-metasprite_t ball[3];
+metasprite_t item[3];
 
 const UBYTE animation[] = {0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 3, 3, 2, 2, 1, 1};
 
@@ -262,9 +262,9 @@ game_state_e game_run() {
 
                                         anim++; anim &= ANIM_MASK;
 
-                                        if (anim == 0) SOUND_BALL;
+                                        if (anim == 0) SOUND_JUMP;
 
-                                        move_metasprite(ball, (selected - 1) << 2, 2, mx, my - animation[anim]);
+                                        move_metasprite(item, (selected - 1) << 2, 2, mx, my - animation[anim]);
                                         playfield_process_animation(anim);
 
                                         wait_vbl_done(); 
@@ -322,11 +322,11 @@ game_state_e game_run() {
         // draw selection and cursor
         move_metasprite(cursor, 0x1c + (anim_curs << 2), 0, (x << 4) + 8, (y << 4) + 16);
         if (selected) {
-            if (anim == 0) SOUND_BALL;
-            ball[1].props = ball[0].props = selected;
-            move_metasprite(ball, (selected - 1) << 2, 2, (sx << 4) + 8, (sy << 4) + 16 - animation[anim]);
+            if (anim == 0) SOUND_JUMP;
+            item[1].props = item[0].props = selected;
+            move_metasprite(item, (selected - 1) << 2, 2, (sx << 4) + 8, (sy << 4) + 16 - animation[anim]);
         } else {
-            hide_metasprite(ball, 2);
+            hide_metasprite(item, 2);
         }
         // animate playfield
         playfield_process_animation(anim);
@@ -361,9 +361,9 @@ void main() {
 
     gb_decompress_bkg_data(0x80, font);
 
-    memcpy(ball, ball_defaults, sizeof(ball));
+    memcpy(item, item_defaults, sizeof(item));
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) 
-        memcpy(preview_balls[i], ball_defaults, sizeof(preview_balls[0]));
+        memcpy(preview_items[i], item_defaults, sizeof(preview_items[0]));
 
     memcpy(score_display, score_display_defaults, sizeof(score_display));
 

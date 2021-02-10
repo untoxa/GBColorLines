@@ -9,7 +9,7 @@
 #include "graphics.h"
 
 extern UBYTE playfield[PLAYFIELD_SIZE];
-extern metasprite_t preview_balls[PREVIEW_SIZE][3];
+extern metasprite_t preview_items[PREVIEW_SIZE][3];
 
 extern myrand_state_t r7, r81;
 

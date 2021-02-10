@@ -17,7 +17,7 @@ extern const unsigned char field_item_empty[];
 extern const unsigned int palettes[];
 
 extern const metasprite_t cursor[];
-extern const metasprite_t ball_defaults[];
+extern const metasprite_t item_defaults[];
 
 extern const unsigned char font[];
 
