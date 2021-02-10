@@ -72,12 +72,7 @@ game_state_e intro_run() {
     memset(shadow_OAM, 0, 40 * sizeof(OAM_item_t));
 
     // display some background
-    if (_cpu == CGB_TYPE) {
-        VBK_REG = 1;
-        set_bkg_tiles(2, 5, 15, 3, intro_attr);
-        VBK_REG = 0;
-    }
-    set_bkg_tiles(2, 5, 15, 3, intro_map);
+    set_attributed_bkg_tiles(2, 5, 15, 3, intro_map, intro_attr);
 
     UBYTE start_sprite = move_metasprite(start_msg, 0, 0, 42, 96);
 
@@ -87,7 +82,7 @@ game_state_e intro_run() {
         while (*pc) {
             *pc++ = ((*pc - 0x21) << 1) + 0x80;
         }
-        set_bkg_tiles(15 - len, 18, 5 + len, 1, score_text); 
+        set_bkg_tiles_blank(15 - len, 18, 5 + len, 1, score_text); 
     }
 
     // loop until start
@@ -132,12 +127,7 @@ game_state_e over_run() {
     memset(shadow_OAM, 0, 40 * sizeof(OAM_item_t));
 
     // display some background
-    if (_cpu == CGB_TYPE) {
-        VBK_REG = 1;
-        set_bkg_tiles(2, 5, 15, 3, intro_attr);
-        VBK_REG = 0;
-    }
-    set_bkg_tiles(2, 5, 15, 3, intro_map);
+    set_attributed_bkg_tiles(2, 5, 15, 3, intro_map, intro_attr);
 
     UBYTE tmp_score_text[16];
     memcpy(tmp_score_text, "SCORE:", 6);
@@ -146,7 +136,7 @@ game_state_e over_run() {
     while (*pc) {
         *pc++ = ((*pc - 0x21) << 1) + 0x80;
     }
-    set_bkg_tiles(((20 - len) >> 1) + 1, 15, len, 1, tmp_score_text); 
+    set_bkg_tiles_blank(((20 - len) >> 1) + 1, 15, len, 1, tmp_score_text); 
     scroll_set_pos((len & 1) ? 4 : 8);
 
     // wait pad is up

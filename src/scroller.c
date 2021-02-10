@@ -3,6 +3,7 @@
 #include "scroller.h"
 #include "myrand.h"
 #include "score.h"
+#include "graphics.h"
 
 extern game_state_e game_state;
 
@@ -57,15 +58,7 @@ void scroll_set_pos(UBYTE x) {
 void scroll_process() {
     if ((scroll_pos_x & 0x07) == 0) {
         if (*scroll_text_ptr == 0) scroll_text_ptr = scroll_text;
-        UBYTE charpos = ((scroll_pos_x >> 3) + 20) & 0x1f;
-        UBYTE rcolor = myrand(&r7) + 1;
-        UBYTE schar = ascii_to_tile(*scroll_text_ptr);
-        if (_cpu == CGB_TYPE) {
-            VBK_REG = 1;
-            set_bkg_tile_xy(charpos, 16, rcolor);
-            VBK_REG = 0;
-        }
-        set_bkg_tile_xy(charpos, 16, schar);
+        set_attributed_bkg_tile_xy(((scroll_pos_x >> 3) + 20) & 0x1f, 16, ascii_to_tile(*scroll_text_ptr), myrand(&r7) + 1);
         scroll_text_ptr++;
     }
     scroll_pos_x++; scroll_pos_y = animation[(scroll_pos_x >> 1) & ANIM_MASK];

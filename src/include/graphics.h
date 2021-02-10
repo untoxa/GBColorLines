@@ -35,4 +35,31 @@ extern const UBYTE score_animation[SCORE_ANIM_SIZE];
 
 #define ASCII_TO_TILE(ch) (UBYTE)(((ch) > 0x20) ? (((ch) - 0x21) << 1) + 0x80 : 0u)
 
+inline void set_bkg_tiles_blank(UBYTE x, UBYTE y, UBYTE w, UBYTE h, const UBYTE * map) {
+    if (_cpu == CGB_TYPE) {
+        VBK_REG = 1;
+        fill_bkg_rect(x, y, w, h, 0);
+        VBK_REG = 0;
+    }
+    set_bkg_tiles(x, y, w, h, (UBYTE *)map);
+}
+
+inline void set_attributed_bkg_tiles(UBYTE x, UBYTE y, UBYTE w, UBYTE h, const UBYTE * map, const UBYTE * attr) {
+    if (_cpu == CGB_TYPE) {
+        VBK_REG = 1;
+        set_bkg_tiles(x, y, w, h, (UBYTE *)attr);
+        VBK_REG = 0;
+    }
+    set_bkg_tiles(x, y, w, h, (UBYTE *)map);
+}
+
+inline void set_attributed_bkg_tile_xy(UBYTE x, UBYTE y, UBYTE t, UBYTE a) {
+    if (_cpu == CGB_TYPE) {
+        VBK_REG = 1;
+        set_bkg_tile_xy(x, y, a);
+        VBK_REG = 0;
+    }
+    set_bkg_tile_xy(x, y, t);
+}
+
 #endif

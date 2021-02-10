@@ -4,6 +4,7 @@
 #include "playfield.h"
 #include "score.h"
 #include "sound.h"
+#include "graphics.h"
 
 UBYTE playfield[PLAYFIELD_SIZE];
 
@@ -14,7 +15,7 @@ UBYTE playfield_anim = 0;
 
 void playfield_draw() {
     for (UBYTE i = 0; i < (PLAYFIELD_HEIGHT * 2); i+=2) {
-        set_bkg_tiles(0, i, 18, 2, field_row);
+        set_bkg_tiles_blank(0, i, 18, 2, field_row);
     }
 }
 
@@ -22,13 +23,7 @@ void playfield_draw_item(UBYTE x, UBYTE y, UBYTE color) {
     UBYTE attr = color & 0x07u;
     UBYTE attributes[4] = {attr, attr, attr, attr};
     UBYTE tiles[4] = {(attr << 2) + 0x01, (attr << 2) + 0x03, (attr << 2) + 0x02, (attr << 2) + 0x04};
-
-    if (_cpu == CGB_TYPE) {
-        VBK_REG = 1;
-        set_bkg_tiles(x << 1, y << 1, 2, 2, attributes);    
-        VBK_REG = 0;
-    }
-    set_bkg_tiles(x << 1, y << 1, 2, 2, tiles);    
+    set_attributed_bkg_tiles(x << 1, y << 1, 2, 2, tiles, attributes);    
 }
 
 UBYTE playfield_put_item(UWORD idx, UBYTE color) {
