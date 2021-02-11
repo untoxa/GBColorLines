@@ -73,6 +73,8 @@ void clear_viewport() {
 game_state_e intro_run() {
     // clear screen;
     clear_viewport();
+    // restore zero sprite palette
+    if (_cpu == CGB_TYPE) set_sprite_palette(0, 1, sprite_palettes);
 
     // display some background
     set_attributed_bkg_tiles(2, 5, 15, 3, intro_map, intro_attr);
@@ -123,6 +125,8 @@ game_state_e intro_run() {
 game_state_e over_run() {
     // clear screen;
     clear_viewport();
+    // restore zero sprite palette
+    if (_cpu == CGB_TYPE) set_sprite_palette(0, 1, sprite_palettes);
 
     // display some background
     set_attributed_bkg_tiles(2, 5, 15, 3, intro_map, intro_attr);
@@ -169,10 +173,31 @@ game_state_e over_run() {
     }
 }
 
+static UBYTE cursor_x, cursor_y;
+static UBYTE selected, selected_x, selected_y;
+static UBYTE anim, anim_curs;
+
+inline void animation_next_step() {
+    anim++; anim &= ANIM_MASK;
+    if ((anim & 0x03) == 0) {
+        anim_curs++; if (anim_curs == 7) anim_curs = 0;
+    }
+}
+
+inline void actors_animate(UBYTE anim, UBYTE mx, UBYTE my) {
+    // draw selection and cursor
+    if (_cpu == CGB_TYPE) set_sprite_palette(0, 1, &sprite_palettes[(anim_curs + 1) << 2]);
+    move_metasprite(cursor, 0x1c + (anim_curs << 2), 0, (cursor_x << 4) + 8, (cursor_y << 4) + 16);
+    if (selected) {
+        if (anim == 0) SOUND_JUMP;
+        item[1].props = item[0].props = selected;
+        move_metasprite(item, (selected - 1) << 2, 2, mx, my);
+    } else {
+        hide_metasprite(item, 2);
+    }
+}
 
 game_state_e game_run() {
-    static UBYTE x, y;
-    static UBYTE selected, sx, sy, anim, anim_curs;
     static UBYTE joy, joy_old;
 
     // reset score
@@ -196,8 +221,8 @@ game_state_e game_run() {
     playfield_randomize_preview();
     playfield_put_random(5);
 
-    x = y = 0;
-    sx = sy = 0; selected = 0;
+    cursor_x = cursor_y = 0;
+    selected_x = selected_y = 0; selected = 0;
     anim_curs = anim = 0;
 
     joy_old = joy = 0;
@@ -209,31 +234,31 @@ game_state_e game_run() {
         if (joy != joy_old) {
             switch (joy) {
                 case J_LEFT:
-                    if (x) x--; else x = PLAYFIELD_WIDTH - 1;
+                    if (cursor_x) cursor_x--; else cursor_x = PLAYFIELD_WIDTH - 1;
                     if ((!selected) && ((sound_control & MUSIC_ON) == 0)) SOUND_CURSOR;
                     break;
                 case J_RIGHT:
-                    if (x < (PLAYFIELD_WIDTH - 1)) x++; else x = 0;
+                    if (cursor_x < (PLAYFIELD_WIDTH - 1)) cursor_x++; else cursor_x = 0;
                     if ((!selected) && ((sound_control & MUSIC_ON) == 0)) SOUND_CURSOR;
                     break;
                 case J_UP:
-                    if (y) y--; else y = PLAYFIELD_HEIGHT - 1;
+                    if (cursor_y) cursor_y--; else cursor_y = PLAYFIELD_HEIGHT - 1;
                     if ((!selected) && ((sound_control & MUSIC_ON) == 0)) SOUND_CURSOR;
                     break;
                 case J_DOWN:
-                    if (y < (PLAYFIELD_HEIGHT - 1)) y++; else y = 0;
+                    if (cursor_y < (PLAYFIELD_HEIGHT - 1)) cursor_y++; else cursor_y = 0;
                     if ((!selected) && ((sound_control & MUSIC_ON) == 0)) SOUND_CURSOR;
                     break;
                 case J_A: {
                     if (selected) {
-                        if (playfield_get(x, y) == 0) {
-                            path_length = find_path(sx, sy, x, y);
+                        if (playfield_get(cursor_x, cursor_y) == 0) {
+                            path_length = find_path(selected_x, selected_y, cursor_x, cursor_y);
                             if (path_length != LEE_MAX_STEPS) {       
-                                restore_path(x, y, path);
+                                restore_path(cursor_x, cursor_y, path);
 
                                 // animate path 
-                                UBYTE mx = (sx << 4) + 8u;
-                                UBYTE my = (sy << 4) + 16u;
+                                UBYTE mx = (selected_x << 4) + 8u;
+                                UBYTE my = (selected_y << 4) + 16u;
                                 for (UBYTE i = 0; i <= path_length; i++) {
                                     UBYTE cx = ((UBYTE)(path[i] & LEE_MASK) << 4u) + 8u;
                                     UBYTE cy = ((UBYTE)(path[i] >> LEE_BITS) << 4u) + 16u;
@@ -243,41 +268,41 @@ game_state_e game_run() {
                                         if (my < cy) my++; else 
                                         if (my > cy) my--; else break;
 
-                                        anim++; anim &= ANIM_MASK;
-
-                                        if (anim == 0) SOUND_JUMP;
-
-                                        move_metasprite(item, (selected - 1) << 2, 2, mx, my - animation[anim]);
+                                        // next animation step
+                                        animation_next_step();
+                                        // animate sprites
+                                        actors_animate(anim, mx, my - animation[anim]);
+                                        // animate playfield
                                         playfield_process_animation(anim);
 
                                         wait_vbl_done(); 
                                     }
                                 }
                                 // set new values
-                                playfield_set(sx, sy, 0);
-                                playfield_draw_item(sx, sy, 0);
-                                UBYTE tmp_score = playfield_put_item((y * PLAYFIELD_WIDTH) + x, selected);
+                                playfield_set(selected_x, selected_y, 0);
+                                playfield_draw_item(selected_x, selected_y, 0);
+                                UBYTE tmp_score = playfield_put_item((cursor_y * PLAYFIELD_WIDTH) + cursor_x, selected);
                                 if (!tmp_score) {
                                     if (!playfield_put_random(3)) return game_over;
                                 } else {
                                     score_add(tmp_score);
                                 }
-                                selected = 0;
+                                selected = FALSE;
                             }
                         } else {
-                            UBYTE selected_new = playfield_get(x, y);
+                            UBYTE selected_new = playfield_get(cursor_x, cursor_y);
                             if (selected_new) {
-                                playfield_draw_item(sx, sy, selected);
-                                sx = x, sy = y;
+                                playfield_draw_item(selected_x, selected_y, selected);
+                                selected_x = cursor_x, selected_y = cursor_y;
                                 selected = selected_new;
-                                playfield_draw_item(sx, sy, 0);
+                                playfield_draw_item(selected_x, selected_y, 0);
                             }
                         }
                     } else {
-                        selected = playfield_get(x, y);
+                        selected = playfield_get(cursor_x, cursor_y);
                         if (selected) {
-                            sx = x, sy = y;
-                            playfield_draw_item(sx, sy, 0);
+                            selected_x = cursor_x, selected_y = cursor_y;
+                            playfield_draw_item(selected_x, selected_y, 0);
                         }
                     } 
                     break;
@@ -296,21 +321,9 @@ game_state_e game_run() {
         }
 
         // next animation step
-        anim++; anim &= ANIM_MASK;
-
-        if ((anim & 0x03) == 0) {
-            anim_curs++; if (anim_curs == 7) anim_curs = 0;
-        }
-
-        // draw selection and cursor
-        move_metasprite(cursor, 0x1c + (anim_curs << 2), 0, (x << 4) + 8, (y << 4) + 16);
-        if (selected) {
-            if (anim == 0) SOUND_JUMP;
-            item[1].props = item[0].props = selected;
-            move_metasprite(item, (selected - 1) << 2, 2, (sx << 4) + 8, (sy << 4) + 16 - animation[anim]);
-        } else {
-            hide_metasprite(item, 2);
-        }
+        animation_next_step();
+        // animate sprites
+        actors_animate(anim, (selected_x << 4) + 8, (selected_y << 4) + 16 - animation[anim]);
         // animate playfield
         playfield_process_animation(anim);
 
@@ -334,10 +347,10 @@ void main() {
     }
     toggle_sound_settings(0);
 
-    OBP0_REG = BGP_REG = 0x1Bu;
+    OBP0_REG = 0x3bu; BGP_REG = 0x1Bu;
     if (_cpu == CGB_TYPE) {
-        set_bkg_palette(0, 8, palettes);
-        set_sprite_palette(0, 8, palettes);
+        set_bkg_palette(0, 8, background_palettes);
+        set_sprite_palette(0, 8, sprite_palettes);
     }
     gb_decompress_bkg_data(0, bkg_tiles);
     gb_decompress_sprite_data(0, sprite_tiles);

@@ -14,7 +14,8 @@ extern const unsigned char intro_attr[];
 extern const unsigned char field_row[];
 extern const unsigned char field_item_empty[];
 
-extern const unsigned int palettes[];
+extern const unsigned int background_palettes[];
+extern const unsigned int sprite_palettes[];
 
 extern const metasprite_t cursor[];
 extern const metasprite_t item_defaults[];
