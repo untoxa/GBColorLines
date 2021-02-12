@@ -16,11 +16,14 @@ extern myrand_state_t r7, r81;
 extern UBYTE playfield_anim;
 extern const UBYTE animation[];
 
+extern UBYTE random_put_scores;
+extern UBYTE preview_placement;
+
 void playfield_draw();
 void playfield_draw_item(UBYTE x, UBYTE y, UBYTE color);
 
 inline UBYTE playfield_get(UBYTE x, UBYTE y) {
-    return playfield[(y * PLAYFIELD_WIDTH) + x];
+    return playfield[(y * PLAYFIELD_WIDTH) + x] & PREVIEW_MASK;
 }
 inline void playfield_set(UBYTE x, UBYTE y, UBYTE color) {
     playfield[(y * PLAYFIELD_WIDTH) + x] = color;

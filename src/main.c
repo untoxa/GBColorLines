@@ -54,12 +54,6 @@ void toggle_sound_settings(UBYTE addend) {
 }
 
 
-UBYTE test_collision(UBYTE x, UBYTE y) {
-    if (x > (PLAYFIELD_WIDTH - 1)) return FALSE;
-    if (y > (PLAYFIELD_HEIGHT - 1)) return FALSE;
-    return (playfield[(y * PLAYFIELD_WIDTH) + x] == 0);
-}
-
 void clear_viewport() {
     wait_vbl_done();
     HIDE_SPRITES; HIDE_BKG;
