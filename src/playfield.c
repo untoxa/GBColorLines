@@ -9,6 +9,7 @@
 UBYTE playfield[PLAYFIELD_SIZE];
 
 UBYTE preview_colors[PREVIEW_SIZE];
+UWORD preview_coords[PREVIEW_SIZE];
 metasprite_t preview_items[PREVIEW_SIZE][3];
 
 UBYTE playfield_anim = 0;
@@ -23,6 +24,13 @@ void playfield_draw_item(UBYTE x, UBYTE y, UBYTE color) {
     UBYTE attr = color & 0x07u;
     UBYTE attributes[4] = {attr, attr, attr, attr};
     UBYTE tiles[4] = {(attr << 2) + 0x01, (attr << 2) + 0x03, (attr << 2) + 0x02, (attr << 2) + 0x04};
+    set_attributed_bkg_tiles(x << 1, y << 1, 2, 2, tiles, attributes);    
+}
+
+void playfield_draw_hint_item(UBYTE x, UBYTE y, UBYTE color) {
+    UBYTE attr = color & 0x07u;
+    UBYTE attributes[4] = {attr, attr, attr, attr};
+    UBYTE tiles[4] = {(attr << 2) + 0x1d, (attr << 2) + 0x1f, (attr << 2) + 0x1e, (attr << 2) + 0x20};
     set_attributed_bkg_tiles(x << 1, y << 1, 2, 2, tiles, attributes);    
 }
 
@@ -86,10 +94,43 @@ UBYTE playfield_put_item(UWORD idx, UBYTE color) {
     return score;
 }
 
+UWORD playfield_get_random_coord() {
+    // get new coords
+    UBYTE r = myrand(&r81) + 1;
+    UBYTE exit = FALSE;
+    UBYTE * pf = playfield;
+    while (r) {
+        if (*pf == 0) {
+            if (--r == 0) break;
+            exit = FALSE;
+        }
+        if (++pf == (playfield + sizeof(playfield))) {
+            if (exit) return 100;
+            pf = playfield;
+            exit = TRUE;
+        }
+    }
+    return (UWORD)(pf - playfield);
+}
+
+void playfield_refresh_preview() {
+    for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
+        // put item color
+        preview_items[i][1].props = preview_items[i][0].props = preview_colors[i]; 
+        // put coord hint
+        UWORD idx = preview_coords[i];        
+        if (idx < 81) playfield_draw_hint_item(idx % PLAYFIELD_WIDTH, idx / PLAYFIELD_HEIGHT, preview_colors[i]);
+    }
+}
+
 void playfield_randomize_preview() {
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
-        preview_items[i][1].props = preview_items[i][0].props = preview_colors[i] = myrand(&r7) + 1; 
+        // put item color
+        preview_colors[i] = myrand(&r7) + 1; 
+        // put coord hint        
+        preview_coords[i] = playfield_get_random_coord();
     }
+    playfield_refresh_preview();
 }
 
 void playfield_process_animation(UBYTE anim) {
@@ -115,7 +156,7 @@ void playfield_process_animation(UBYTE anim) {
     }
 }
 
-UBYTE playfield_put_random(UBYTE count) {
+UBYTE playfield_put_random(UBYTE count, UBYTE color) {
     for (UBYTE i = 0; i != count; i++) {
         UBYTE r = myrand(&r81) + 1;
         UBYTE exit = FALSE;
@@ -131,17 +172,36 @@ UBYTE playfield_put_random(UBYTE count) {
                 exit = TRUE;
             }
         }
-        if (i < PREVIEW_SIZE) {
-            // get colors from preview
-            score_add(playfield_put_item((UWORD)(pf - playfield), preview_items[i][0].props));       
+        score_add(playfield_put_item((UWORD)(pf - playfield), (color) ? color : myrand(&r7) + 1));       
+    }
+
+    // pop sound
+    SOUND_POP;
+
+    // check for free space
+    for (UBYTE i = 0; i < PLAYFIELD_SIZE; i++)
+        if (playfield[i] == 0) return TRUE;
+
+    return FALSE;
+}
+
+UBYTE playfield_put_previewed() {
+    UBYTE not_put[PREVIEW_SIZE];
+    UBYTE put_count = 0;
+    for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
+        UWORD idx = preview_coords[i];
+        if ((idx < 81) && (playfield[idx] == 0)) {
+            put_count++;
+            score_add(playfield_put_item(idx, preview_colors[i]));
+            not_put[i] = 0;
         } else {
-            // generate random
-            score_add(playfield_put_item((UWORD)(pf - playfield), myrand(&r7) + 1));       
+            not_put[i] = preview_colors[i];
         }
     }
 
-    // next colors
-    playfield_randomize_preview();
+    for (UBYTE i = 0; i != PREVIEW_SIZE; i++)
+        if (not_put[i]) 
+            if (!playfield_put_random(1, not_put[i])) return FALSE;
 
     // pop sound
     SOUND_POP;

@@ -28,10 +28,12 @@ inline void playfield_set(UBYTE x, UBYTE y, UBYTE color) {
 
 UBYTE playfield_put_item(UWORD idx, UBYTE color);
 
+void playfield_refresh_preview();
 void playfield_randomize_preview();
 
 void playfield_process_animation(UBYTE anim);
 
-UBYTE playfield_put_random(UBYTE count);
+UBYTE playfield_put_random(UBYTE count, UBYTE color);
+UBYTE playfield_put_previewed();
 
 #endif

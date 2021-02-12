@@ -218,8 +218,10 @@ game_state_e game_run() {
     playfield_draw();
 
     // put initial items
+    playfield_put_random(5, 0);
+
+    // next random items
     playfield_randomize_preview();
-    playfield_put_random(5);
 
     cursor_x = cursor_y = 0;
     selected_x = selected_y = 0; selected = 0;
@@ -283,9 +285,11 @@ game_state_e game_run() {
                                 playfield_draw_item(selected_x, selected_y, 0);
                                 UBYTE tmp_score = playfield_put_item((cursor_y * PLAYFIELD_WIDTH) + cursor_x, selected);
                                 if (!tmp_score) {
-                                    if (!playfield_put_random(3)) return game_over;
+                                    if (!playfield_put_previewed()) return game_over;
+                                    playfield_randomize_preview();
                                 } else {
                                     score_add(tmp_score);
+                                    playfield_refresh_preview();
                                 }
                                 selected = FALSE;
                             }
@@ -308,7 +312,8 @@ game_state_e game_run() {
                     break;
                 }
                 case J_B:
-                    if (!playfield_put_random(3)) return game_over;
+                    if (!playfield_put_previewed()) return game_over;
+                    playfield_randomize_preview();
                     break;
                 case J_START:
                     if (score_anim == SCORE_ANIM_SIZE) score_anim = 0;
