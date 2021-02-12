@@ -11,13 +11,13 @@
 #define LEE_MAX_WIDTH (1 << LEE_BITS)
 #define LEE_MAX_HEIGHT (1 << LEE_BITS) 
 
-UBYTE find_path(UBYTE x, UBYTE y, UBYTE dx, UBYTE dy);
-UBYTE restore_path(UBYTE x, UBYTE y, UWORD * path);
+UBYTE lee_find_path(UBYTE x, UBYTE y, UBYTE dx, UBYTE dy);
+UBYTE lee_restore_path(UBYTE x, UBYTE y, UWORD * path);
 
-inline UBYTE get_coords_x(UWORD pos) {
+inline UBYTE lee_get_coords_x(UWORD pos) {
     return pos & LEE_MASK;
 }
-inline UBYTE get_coords_y(UWORD pos) {
+inline UBYTE lee_get_coords_y(UWORD pos) {
     return pos >> LEE_BITS;
 }
 

@@ -31,9 +31,9 @@ inline UWORD queue_pop() {
 
 UBYTE visited[LEE_MAX_WIDTH * LEE_MAX_HEIGHT];
 
-extern UBYTE test_collision(UBYTE x, UBYTE y);
+extern UBYTE lee_test_collision(UBYTE x, UBYTE y);
 
-UBYTE find_path(UBYTE x, UBYTE y, UBYTE dx, UBYTE dy) {
+UBYTE lee_find_path(UBYTE x, UBYTE y, UBYTE dx, UBYTE dy) {
     static UWORD src, dest, pos;
     static UBYTE step;
 
@@ -55,22 +55,22 @@ UBYTE find_path(UBYTE x, UBYTE y, UBYTE dx, UBYTE dy) {
         step++;
         if (step == LEE_MAX_STEPS) return LEE_MAX_STEPS;
 
-        UBYTE cx = get_coords_x(pos);
-        UBYTE cy = get_coords_y(pos);
+        UBYTE cx = lee_get_coords_x(pos);
+        UBYTE cy = lee_get_coords_y(pos);
 
-        if ((cx != 0) && (visited[pos - 1] == LEE_MAX_STEPS) && (test_collision(cx - 1, cy))) {
+        if ((cx != 0) && (visited[pos - 1] == LEE_MAX_STEPS) && (lee_test_collision(cx - 1, cy))) {
             visited[pos - 1] = step;
             queue_push(pos - 1);
         }
-        if ((cx < (LEE_MAX_WIDTH - 1)) && (visited[pos + 1] == LEE_MAX_STEPS) && (test_collision(cx + 1, cy))) {
+        if ((cx < (LEE_MAX_WIDTH - 1)) && (visited[pos + 1] == LEE_MAX_STEPS) && (lee_test_collision(cx + 1, cy))) {
             visited[pos + 1] = step;
             queue_push(pos + 1);
         }
-        if ((cy != 0) && (visited[pos - LEE_MAX_WIDTH] == LEE_MAX_STEPS) && (test_collision(cx, cy - 1))) {
+        if ((cy != 0) && (visited[pos - LEE_MAX_WIDTH] == LEE_MAX_STEPS) && (lee_test_collision(cx, cy - 1))) {
             visited[pos - LEE_MAX_WIDTH] = step;
             queue_push(pos - LEE_MAX_WIDTH);
         }
-        if ((cy < (LEE_MAX_HEIGHT - 1)) && (visited[pos + LEE_MAX_WIDTH] == LEE_MAX_STEPS) && (test_collision(cx, cy + 1))) {
+        if ((cy < (LEE_MAX_HEIGHT - 1)) && (visited[pos + LEE_MAX_WIDTH] == LEE_MAX_STEPS) && (lee_test_collision(cx, cy + 1))) {
             visited[pos + LEE_MAX_WIDTH] = step;
             queue_push(pos + LEE_MAX_WIDTH);
         }
@@ -78,7 +78,7 @@ UBYTE find_path(UBYTE x, UBYTE y, UBYTE dx, UBYTE dy) {
     return LEE_MAX_STEPS; 
 }
 
-UBYTE restore_path(UBYTE x, UBYTE y, UWORD * path) {
+UBYTE lee_restore_path(UBYTE x, UBYTE y, UWORD * path) {
     static UWORD pos;
     static UBYTE step, cx, cy;
 

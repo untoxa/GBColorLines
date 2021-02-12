@@ -248,16 +248,16 @@ game_state_e game_run() {
                 case J_A: {
                     if (selected) {
                         if (playfield_get(cursor_x, cursor_y) == 0) {
-                            path_length = find_path(selected_x, selected_y, cursor_x, cursor_y);
+                            path_length = lee_find_path(selected_x, selected_y, cursor_x, cursor_y);
                             if (path_length != LEE_MAX_STEPS) {       
-                                restore_path(cursor_x, cursor_y, path);
+                                lee_restore_path(cursor_x, cursor_y, path);
 
                                 // animate path 
                                 UBYTE mx = (selected_x << 4) + 8u;
                                 UBYTE my = (selected_y << 4) + 16u;
                                 for (UBYTE i = 0; i <= path_length; i++) {
-                                    UBYTE cx = ((UBYTE)(path[i] & LEE_MASK) << 4u) + 8u;
-                                    UBYTE cy = ((UBYTE)(path[i] >> LEE_BITS) << 4u) + 16u;
+                                    UBYTE cx = (lee_get_coords_x(path[i]) << 4u) + 8u;
+                                    UBYTE cy = (lee_get_coords_y(path[i]) << 4u) + 16u;
                                     while (TRUE) {
                                         if (mx < cx) mx++; else 
                                         if (mx > cx) mx--; else 

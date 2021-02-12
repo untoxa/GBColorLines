@@ -18,7 +18,7 @@ UBYTE random_put_scores = FALSE;
 UBYTE preview_placement = TRUE;
 
 // collision test routine, called by lee algo
-UBYTE test_collision(UBYTE x, UBYTE y) {
+UBYTE lee_test_collision(UBYTE x, UBYTE y) {
     if (x > (PLAYFIELD_WIDTH - 1)) return FALSE;
     if (y > (PLAYFIELD_HEIGHT - 1)) return FALSE;
     return (playfield_get(x, y) == 0);
