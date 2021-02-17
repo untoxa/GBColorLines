@@ -5,6 +5,9 @@
 #include <gb/cgb.h>
 #include <gb/metasprites.h>
 
+extern const unsigned char catskull_tiles[];
+extern const unsigned char catskull_map[];
+
 extern const unsigned char sprite_tiles[];
 extern const unsigned char bkg_tiles[];
 

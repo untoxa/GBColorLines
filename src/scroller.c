@@ -22,6 +22,7 @@ const unsigned char scroll_text[] =
 "[START] - SHOW SCORE; [SELECT] - TOGGLE MUSIC AND SOUND. "\
 "THIS GAME WAS ORIGINALLY MADE FOR IBM PC BY OLGA DEMINA IN 1992. "\
 "GAME BOY REMAKE BY TOXA. MUSIC AND SFX BY KABCORP. "\
+"PUBLISHED BY CATSKULL GAMES. "\
 "DEVELOPED USING ZALO'S GBDK-2020, \"EMULICIOUS\" GAME BOY EMULATOR AND VS.CODE DEBUG ADAPTER EXTENSION BY CALINDRO, "\
 "MUSIC WAS COMPOSED USING HUGETRACKER, WRITTEN BY SUPERDISK. "\
 "THANKS TO BBBBBR AND CHRIS MALTBY FOR TESTING AND USEFUL SUGGESTIONS. "\
@@ -32,6 +33,11 @@ const UBYTE * scroll_text_ptr = scroll_text;
 void scroll_update_isr() {
     switch (LYC_REG) {
         case 0:
+            SCX_REG = (game_state == game_intro) ? 4 : 0; 
+            SCY_REG = 0;
+            LYC_REG = 39;
+            break;
+        case 39:
             SCX_REG = 0; SCY_REG = 0;
             LYC_REG = SCROLL_Y_POS;
             break;

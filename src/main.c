@@ -72,6 +72,11 @@ game_state_e intro_run() {
 
     // display some background
     set_attributed_bkg_tiles(2, 5, 15, 3, intro_map, intro_attr);
+    {
+        UBYTE logo_attr[13*3];
+        for (UBYTE i = 0; i != sizeof(logo_attr); i++) logo_attr[i] = myrand(&r7) + 1; 
+        set_attributed_bkg_tiles(4, 2, 13, 3, catskull_map, logo_attr);
+    }
 
     UBYTE start_sprite = move_metasprite(start_msg, 0, 0, 42, 96);
 
@@ -352,6 +357,7 @@ void main() {
         set_sprite_palette(0, 8, sprite_palettes);
     }
     gb_decompress_bkg_data(0, bkg_tiles);
+    gb_decompress_bkg_data(0x40, catskull_tiles);
     gb_decompress_sprite_data(0, sprite_tiles);
 
     gb_decompress_bkg_data(0x80, font);
