@@ -338,7 +338,7 @@ void main() {
     NR50_REG = 0x77u;
 
     __critical {
-	    TMA_REG=0x00U; TAC_REG=0b00000111;
+        TMA_REG = 0xC0u; TAC_REG = 0x07u;
         add_TIM(music_update);
         LYC_REG = 0; STAT_REG |= 0b01000000;
         add_LCD(scroll_update_isr);

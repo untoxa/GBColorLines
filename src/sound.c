@@ -2,8 +2,9 @@
 #include <string.h>
 
 #include "hUGEDriver.h"
+#include "sound_sampleplayer.h"
 
-extern const hUGESong_t ingame;
+extern const hUGESong_t BGM_MAIN;
 
 UBYTE music_initialized = FALSE;
 UBYTE music_playing = FALSE;
@@ -13,11 +14,16 @@ UBYTE channel_pause[4];
 void music_init() {
     if (music_initialized) return;
     memset(channel_pause, 0, sizeof(channel_pause));
-    hUGE_init(&ingame);
+    hUGE_init(&BGM_MAIN);
     music_initialized = TRUE;
 }
 
+UINT8 ISR_counter = 0;
 void music_update() {
+    play_isr();
+    ISR_counter++; ISR_counter &= 3;
+    if (ISR_counter) return;
+    
     // resume channel
     for (UBYTE i = HT_CH1; i <= HT_CH4; i++) {
         if (channel_pause[i]) {

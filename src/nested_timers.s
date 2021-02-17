@@ -1,6 +1,5 @@
 .include "global.s"
 
-.globl  _music_update
 .globl  .int
 
 .area   _HEADER_TIMER (ABS)
