@@ -55,13 +55,10 @@ void toggle_sound_settings(UBYTE addend) {
 
 
 void clear_viewport() {
-    wait_vbl_done();
-    HIDE_SPRITES; HIDE_BKG;
     OAM_item_t * ptr = shadow_OAM;
     for (UBYTE i = 0; i != 40; i++) ptr->y = 0, ptr++;    
     clear_screen();
     scroll_reset();
-    SHOW_SPRITES; SHOW_BKG;
 }
 
 game_state_e intro_run() {
@@ -71,14 +68,14 @@ game_state_e intro_run() {
     if (_cpu == CGB_TYPE) set_sprite_palette(0, 1, sprite_palettes);
 
     // display some background
-    set_attributed_bkg_tiles(2, 5, 15, 3, intro_map, intro_attr);
+    set_attributed_bkg_tiles(2, 6, 15, 3, intro_map, intro_attr);
     {
         UBYTE logo_attr[13*3];
         for (UBYTE i = 0; i != sizeof(logo_attr); i++) logo_attr[i] = myrand(&r7) + 1; 
-        set_attributed_bkg_tiles(4, 2, 13, 3, catskull_map, logo_attr);
+        set_attributed_bkg_tiles(4, 1, 13, 3, catskull_map, logo_attr);
     }
 
-    UBYTE start_sprite = move_metasprite(start_msg, 0, 0, 42, 96);
+    UBYTE start_sprite = move_metasprite(start_msg, 0, 0, 42, 104);
 
     if (highscore) {
         UBYTE *pc = score_text + 5;
@@ -89,12 +86,17 @@ game_state_e intro_run() {
         set_bkg_tiles_blank(15 - len, 18, 5 + len, 1, score_text); 
     }
 
+    wait_vbl_done();
+    SHOW_SPRITES; SHOW_BKG;
+
     // loop until start
     UBYTE wait = 0;
     while (TRUE) {
         switch (joypad()) {
             case J_START: 
                 wait_pad_up();
+                wait_vbl_done();
+                HIDE_SPRITES; HIDE_BKG;
                 return game_play;
             case J_SELECT:
                 if (wait) break;
@@ -105,10 +107,10 @@ game_state_e intro_run() {
         // animate screen
         if (sys_time & 1) {
             playfield_anim++; playfield_anim &= ANIM_MASK;
-            move_metasprite(start_msg, 0, 0, 42 + animation[playfield_anim], 96);
+            move_metasprite(start_msg, 0, 0, 42 + animation[playfield_anim], 104);
             UBYTE base = start_sprite;
             for (UBYTE j = 0; j != TITLE_SIZE; j++) {
-                base += move_metasprite(title[j], 0, base, (j << 4) + 52, 56 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
+                base += move_metasprite(title[j], 0, base, (j << 4) + 52, 64 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
             }
         }
         // process delay
@@ -128,7 +130,7 @@ game_state_e over_run() {
     if (_cpu == CGB_TYPE) set_sprite_palette(0, 1, sprite_palettes);
 
     // display some background
-    set_attributed_bkg_tiles(2, 5, 15, 3, intro_map, intro_attr);
+    set_attributed_bkg_tiles(2, 6, 15, 3, intro_map, intro_attr);
 
     UBYTE tmp_score_text[16];
     memcpy(tmp_score_text, "SCORE:", 6);
@@ -139,6 +141,9 @@ game_state_e over_run() {
     }
     set_bkg_tiles_blank(((20 - len) >> 1) + 1, 15, len, 1, tmp_score_text); 
     scroll_set_pos((len & 1) ? 4 : 8);
+
+    wait_vbl_done();
+    SHOW_SPRITES; SHOW_BKG;
 
     // wait pad is up
     wait_pad_up();
@@ -155,6 +160,8 @@ game_state_e over_run() {
                 break;
             default: 
                 wait_pad_up();
+                wait_vbl_done();
+                HIDE_SPRITES; HIDE_BKG;
                 return game_intro;
         }
         // process delay
@@ -165,7 +172,7 @@ game_state_e over_run() {
             playfield_anim++; playfield_anim &= ANIM_MASK;
             UBYTE base = 0;
             for (UBYTE j = 0; j != OVER_SIZE; j++) {
-                base += move_metasprite(over[j], 0, base, (j << 4) + 60, 56 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
+                base += move_metasprite(over[j], 0, base, (j << 4) + 60, 64 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
             }
         }
         wait_vbl_done();
@@ -221,6 +228,9 @@ game_state_e game_run() {
 
     // next random items
     playfield_randomize_preview();
+
+    wait_vbl_done();
+    SHOW_SPRITES; SHOW_BKG;
 
     cursor_x = cursor_y = 0;
     selected_x = selected_y = 0; selected = 0;
@@ -284,7 +294,11 @@ game_state_e game_run() {
                                 playfield_draw_item(selected_x, selected_y, 0);
                                 UBYTE tmp_score = playfield_put_item((cursor_y * PLAYFIELD_WIDTH) + cursor_x, selected);
                                 if (!tmp_score) {
-                                    if (!playfield_put_previewed()) return game_over;
+                                    if (!playfield_put_previewed()) {
+                                        wait_vbl_done();
+                                        HIDE_SPRITES; HIDE_BKG;
+                                        return game_over;
+                                    }
                                     playfield_randomize_preview();
                                 } else {
                                     score_add(tmp_score);
@@ -311,7 +325,11 @@ game_state_e game_run() {
                     break;
                 }
                 case J_B:
-                    if (!playfield_put_previewed()) return game_over;
+                    if (!playfield_put_previewed()) {
+                        wait_vbl_done();
+                        HIDE_SPRITES; HIDE_BKG;
+                        return game_over;
+                    }
                     playfield_randomize_preview();
                     break;
                 case J_START:
@@ -341,6 +359,8 @@ void main() {
     NR52_REG = 0x80u;
     NR51_REG = 0xffu;
     NR50_REG = 0x77u;
+
+    HIDE_SPRITES; HIDE_BKG;
 
     __critical {
         TMA_REG = 0xC0u; TAC_REG = 0x07u;
@@ -375,7 +395,7 @@ void main() {
         highscore = sram_highscore.highscore;
     }
 
-    SPRITES_8x16; SHOW_SPRITES; SHOW_BKG;
+    SPRITES_8x16;
 
     randomize();
     myrand_init(7, &r7);
