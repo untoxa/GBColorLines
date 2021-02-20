@@ -64,7 +64,10 @@ _wave_addr = _wave_addr + 1
         sbc #0
         ld (hl-), a
         or (hl)
-        call z, _hUGE_reset_wave
+        ret nz
+        
+        ld a, #100
+        ld (hUGE_current_wave), a
         ret
     __endasm;
 }
