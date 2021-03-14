@@ -69,11 +69,13 @@ game_state_e intro_run() {
 
     // display some background
     set_attributed_bkg_tiles(2, 6, 15, 3, intro_map, intro_attr);
+    #ifdef CATSKULL_LOGO
     {
         UBYTE logo_attr[13*3];
         for (UBYTE i = 0; i != sizeof(logo_attr); i++) logo_attr[i] = myrand(&r7) + 1; 
         set_attributed_bkg_tiles(4, 1, 13, 3, catskull_map, logo_attr);
     }
+    #endif
 
     UBYTE start_sprite = move_metasprite(start_msg, 0, 0, 42, 104);
 
@@ -377,7 +379,9 @@ void main() {
         set_sprite_palette(0, 8, sprite_palettes);
     }
     gb_decompress_bkg_data(0, bkg_tiles);
+    #ifdef CATSKULL_LOGO
     gb_decompress_bkg_data(0x40, catskull_tiles);
+    #endif
     gb_decompress_sprite_data(0, sprite_tiles);
 
     gb_decompress_bkg_data(0x80, font);
@@ -401,7 +405,6 @@ void main() {
     myrand_init(7, &r7);
 
     while (TRUE) {
-
         switch (game_state) {
             case game_intro:
                 game_state = intro_run();

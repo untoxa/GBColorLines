@@ -8,9 +8,10 @@ ROM_BUILD_DIR = build
 OBJDIR = obj
 CFLAGS = -Isrc/include -Wa-Isrc/include -Wa-I$(GBDKLIB)
 
-LFLAGS_NBANKS += -Wl-yo$(CART_SIZE) -Wl-ya4 -Wl-j
+#LFLAGS_NBANKS += -Wl-yt0x1B -Wl-yo$(CART_SIZE) -Wl-ya4 -Wl-j
+LFLAGS_NBANKS =
 
-LFLAGS = -Wl-yt0x1B $(LFLAGS_NBANKS) -Wl-klib -Wl-lhUGEDriver.lib -Wm-yc
+LFLAGS = $(LFLAGS_NBANKS) -Wl-j -Wl-klib -Wl-lhUGEDriver.lib -Wm-yc -Wm-yn"COLORLINES"
 
 TARGET = $(ROM_BUILD_DIR)/colorlines.gb
 
