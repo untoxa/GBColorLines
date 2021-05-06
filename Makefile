@@ -11,7 +11,7 @@ CFLAGS = -Isrc/include -Wa-Isrc/include -Wa-I$(GBDKLIB)
 #LFLAGS_NBANKS += -Wl-yt0x1B -Wl-yo$(CART_SIZE) -Wl-ya4 -Wl-j
 LFLAGS_NBANKS =
 
-LFLAGS = $(LFLAGS_NBANKS) -Wl-j -Wl-klib -Wl-lhUGEDriver.lib -Wm-yc -Wm-yn"COLORLINES"
+LFLAGS = $(LFLAGS_NBANKS) -Wl-j -Wm-yS -Wl-klib -Wl-lhUGEDriver.lib -Wm-yc -Wm-yn"COLORLINES"
 
 TARGET = $(ROM_BUILD_DIR)/colorlines.gb
 
@@ -23,7 +23,7 @@ CCORE = $(foreach dir,src/core,$(notdir $(wildcard $(dir)/*.c)))
 
 OBJS = $(CSRC:%.c=$(OBJDIR)/%.o) $(ASRC:%.s=$(OBJDIR)/%.o) $(ACORE:%.s=$(OBJDIR)/%.o) $(CCORE:%.c=$(OBJDIR)/%.o)
 
-all:	directories release $(TARGET) symbols
+all:	directories release $(TARGET)
 
 .PHONY: clean release debug color profile directories
 
@@ -81,6 +81,3 @@ clean:
 	rm -rf $(ROM_BUILD_DIR)
 
 rom: $(TARGET)
-
-symbols:
-	python ./utils/noi2sym.py $(patsubst %.gb,%.noi,$(TARGET)) >$(patsubst %.gb,%.sym,$(TARGET))
