@@ -23,7 +23,8 @@ CCORE = $(foreach dir,src/core,$(notdir $(wildcard $(dir)/*.c)))
 
 OBJS = $(CSRC:%.c=$(OBJDIR)/%.o) $(ASRC:%.s=$(OBJDIR)/%.o) $(ACORE:%.s=$(OBJDIR)/%.o) $(CCORE:%.c=$(OBJDIR)/%.o)
 
-all:	directories release $(TARGET)
+#all:	directories release $(TARGET)
+all:	directories $(TARGET)
 
 .PHONY: clean release debug color profile directories
 

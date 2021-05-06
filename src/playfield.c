@@ -52,35 +52,40 @@ UBYTE playfield_put_item(UWORD idx, UBYTE color) {
         UBYTE x, y, count;
     } lineprop_t;
 
-    UBYTE x = idx % PLAYFIELD_WIDTH, y = idx / PLAYFIELD_HEIGHT;
+    static UBYTE dx, dy;
+    static lineprop_t h, v, d1, d2;
+    
+    h.x = idx % PLAYFIELD_WIDTH; 
+    h.y = idx / PLAYFIELD_HEIGHT; 
+    h.count = 1;
+    
+    v = d1 = d2 = h;
 
     // draw
-    playfield_draw_item(x, y, color);
+    playfield_draw_item(h.x, h.y, color);
     playfield[idx] = color;
 
     UBYTE score = 0;
 
-    // check disappear
-    lineprop_t h = {x, y, 1}, v = {x, y, 1}, d1 = {x, y, 1}, d2 = {x, y, 1};
-    UBYTE dx, dy;
+    // check and disappear:
 
-    // check lines
+    // check lines:
     // check hline
-    while ((h.x) && (playfield_get(h.x - 1, h.y) == color)) h.x--;
+    while ((h.x != 0) && (playfield_get(h.x - 1, h.y) == color)) h.x--;
     dx = h.x;
     while ((dx < (PLAYFIELD_WIDTH - 1)) && (playfield_get(dx + 1, h.y) == color)) dx++, h.count++;
     // check vline
-    while ((v.y) && (playfield_get(v.x, v.y - 1) == color)) v.y--;
+    while ((v.y != 0) && (playfield_get(v.x, v.y - 1) == color)) v.y--;
     dy = v.y;
     while ((dy < (PLAYFIELD_HEIGHT - 1)) && (playfield_get(v.x, dy + 1) == color)) dy++, v.count++;
     // cleck d1
-    while ((d1.x) && (d1.y) && (playfield_get(d1.x - 1, d1.y - 1) == color)) d1.x--, d1.y--;
-    dx = d1.x, dy = d1.y;
+    while ((d1.x != 0) && (d1.y != 0) && (playfield_get(d1.x - 1, d1.y - 1) == color)) d1.x--, d1.y--;
+    dx = d1.x; dy = d1.y;
     while ((dx < (PLAYFIELD_WIDTH - 1)) && (dy < (PLAYFIELD_HEIGHT - 1)) && (playfield_get(dx + 1, dy + 1) == color)) dx++, dy++, d1.count++;
     // cleck d2
-    while ((d2.x) && (d2.y < (PLAYFIELD_HEIGHT - 1)) && (playfield_get(d2.x - 1, d2.y + 1) == color)) d2.x--, d2.y++;
-    dx = d2.x, dy = d2.y;
-    while ((dx < (PLAYFIELD_WIDTH - 1)) && (dy) && (playfield_get(dx + 1, dy - 1) == color)) dx++, dy--, d2.count++;
+    while ((d2.x != 0) && (d2.y < (PLAYFIELD_HEIGHT - 1)) && (playfield_get(d2.x - 1, d2.y + 1) == color)) d2.x--, d2.y++;
+    dx = d2.x; dy = d2.y;
+    while ((dx < (PLAYFIELD_WIDTH - 1)) && (dy != 0) && (playfield_get(dx + 1, dy - 1) == color)) dx++, dy--, d2.count++;
 
     // disappear lines:
     // disappear hline
