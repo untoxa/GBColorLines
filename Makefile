@@ -18,10 +18,7 @@ TARGET = $(ROM_BUILD_DIR)/colorlines.gb
 ASRC = $(foreach dir,src,$(notdir $(wildcard $(dir)/*.s))) 
 CSRC = $(foreach dir,src,$(notdir $(wildcard $(dir)/*.c))) 
 
-ACORE = $(foreach dir,src/core,$(notdir $(wildcard $(dir)/*.s))) 
-CCORE = $(foreach dir,src/core,$(notdir $(wildcard $(dir)/*.c))) 
-
-OBJS = $(CSRC:%.c=$(OBJDIR)/%.o) $(ASRC:%.s=$(OBJDIR)/%.o) $(ACORE:%.s=$(OBJDIR)/%.o) $(CCORE:%.c=$(OBJDIR)/%.o)
+OBJS = $(CSRC:%.c=$(OBJDIR)/%.o) $(ASRC:%.s=$(OBJDIR)/%.o)
 
 #all:	directories release $(TARGET)
 all:	directories $(TARGET)
@@ -49,22 +46,13 @@ profile:
 
 .SECONDARY: $(OBJS) 
 
-directories: $(ROM_BUILD_DIR) $(OBJDIR) $(REL_OBJDIR)
+directories: $(ROM_BUILD_DIR) $(OBJDIR)
 
 $(ROM_BUILD_DIR):
 	mkdir -p $(ROM_BUILD_DIR)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
-
-$(REL_OBJDIR):
-	mkdir -p $(REL_OBJDIR)
-
-$(OBJDIR)/%.o:	src/core/%.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-
-$(OBJDIR)/%.o:	src/core/%.s
-	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(OBJDIR)/%.o:	src/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<

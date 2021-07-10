@@ -373,7 +373,8 @@ void main() {
     }
     toggle_sound_settings(0);
 
-    OBP0_REG = 0x3bu; BGP_REG = 0x1Bu;
+    OBP1_REG = OBP0_REG = 0xD4u; BGP_REG = 0xE4u;
+
     if (_cpu == CGB_TYPE) {
         set_bkg_palette(0, 8, background_palettes);
         set_sprite_palette(0, 8, sprite_palettes);
