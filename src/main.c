@@ -373,7 +373,8 @@ void main() {
     }
     toggle_sound_settings(0);
 
-    OBP1_REG = OBP0_REG = 0xD4u; BGP_REG = 0xE4u;
+    OBP1_REG = OBP0_REG = DMG_PALETTE(DMG_WHITE, DMG_LITE_GRAY, DMG_WHITE, DMG_BLACK); 
+    BGP_REG = DMG_PALETTE(DMG_WHITE, DMG_LITE_GRAY, DMG_DARK_GRAY, DMG_BLACK);
 
     if (_cpu == CGB_TYPE) {
         set_bkg_palette(0, 8, background_palettes);
