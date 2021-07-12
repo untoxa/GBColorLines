@@ -5,8 +5,12 @@
 #include <gb/cgb.h>
 #include <gb/metasprites.h>
 
+#include "game_types.h"
+
+#ifdef CATSKULL_LOGO
 extern const unsigned char catskull_tiles[];
 extern const unsigned char catskull_map[];
+#endif
 
 extern const unsigned char sprite_tiles[];
 extern const unsigned char bkg_tiles[];

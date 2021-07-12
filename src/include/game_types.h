@@ -3,7 +3,7 @@
 
 #include <gb/gb.h>
 
-#define CATSKULL_LOGO
+//#define CATSKULL_LOGO
 
 #define PLAYFIELD_WIDTH 9u
 #define PLAYFIELD_HEIGHT 9u
