@@ -30,4 +30,11 @@ void music_update();
 
 void sound_play(UBYTE channel, UBYTE mute_frames, ...);
 
+#define SOUND_ON 0x01
+#define MUSIC_ON 0x02
+
+extern UBYTE sound_control;
+
+void toggle_sound_settings(UBYTE addend);
+
 #endif

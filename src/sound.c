@@ -3,6 +3,7 @@
 
 #include "hUGEDriver.h"
 #include "sound_sampleplayer.h"
+#include "sound.h"
 
 extern const hUGESong_t BGM_MAIN;
 
@@ -10,6 +11,14 @@ UBYTE music_initialized = FALSE;
 UBYTE music_playing = FALSE;
 UBYTE sound_playing = TRUE;
 UBYTE channel_pause[4];
+
+UBYTE sound_control = SOUND_ON | MUSIC_ON;
+
+void toggle_sound_settings(UBYTE addend) {
+    sound_control += addend; sound_control &= (SOUND_ON | MUSIC_ON); 
+    if (sound_control & MUSIC_ON) music_play(); else music_stop();
+    sound_playing = (sound_control & SOUND_ON);
+}
 
 void music_init() {
     if (music_initialized) return;
