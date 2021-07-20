@@ -23,6 +23,7 @@ typedef enum {game_intro, game_play, game_over} game_state_e;
 typedef struct sram_record_t {
     UINT32 signature;
     UWORD highscore;
+    UBYTE crc;
 } sram_record_t;
 
 #endif

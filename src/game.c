@@ -132,7 +132,7 @@ game_state_e game_run() {
                                     }
                                     playfield_randomize_preview();
                                 } else {
-                                    score_add(tmp_score);
+                                    if (score_add(tmp_score)) SOUND_CLEAR;
                                     playfield_refresh_preview();
                                 }
                                 selected = FALSE;

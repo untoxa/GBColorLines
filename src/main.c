@@ -58,12 +58,8 @@ void main() {
 
     memcpy(score_display, score_display_defaults, sizeof(score_display));
 
-    ENABLE_RAM_MBC5; SWITCH_RAM_MBC5(0);
-    if (sram_highscore.signature != HIGHSCORE_SIGNATURE) {
-        sram_highscore.signature = HIGHSCORE_SIGNATURE; sram_highscore.highscore = 0; 
-    } else {
-        highscore = sram_highscore.highscore;
-    }
+    ENABLE_RAM_MBC5;
+    highscore = score_load();
 
     SPRITES_8x16;
 
@@ -77,11 +73,7 @@ void main() {
                 break;
             case game_play:
                 game_state = game_run();
-                // update highscore
-                if (highscore < score) {
-                    sram_highscore.signature = HIGHSCORE_SIGNATURE; 
-                    sram_highscore.highscore = highscore = score;
-                }
+                if (highscore < score) highscore = score_save(score);
                 break;
             case game_over:
                 game_state = over_run();

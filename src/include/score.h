@@ -16,6 +16,8 @@ extern UBYTE score_text[16];
 
 extern sram_record_t __at(0xA000) sram_highscore;
 
-void score_add(UBYTE addend);
+UWORD score_load();
+UWORD score_save(UWORD score);
+UBYTE score_add(UBYTE addend);
 
 #endif
