@@ -8,11 +8,13 @@ ROM_BUILD_DIR = build
 OBJDIR = obj
 CFLAGS = -Isrc/include -Wa-Isrc/include -Wa-I$(GBDKLIB)
 
+PROJECT_NAME = colorlines
+
 LFLAGS_NBANKS = -Wl-yt0x1B -Wl-yo$(CART_SIZE) -Wl-ya1 -Wl-j
 
-LFLAGS = $(LFLAGS_NBANKS) -Wl-j -Wm-yS -Wl-klib -Wl-lhUGEDriver.lib -Wm-yc -Wm-yn"COLORLINES"
+LFLAGS = $(LFLAGS_NBANKS) -Wl-j -Wm-yS -Wl-klib -Wl-lhUGEDriver.lib -Wm-yc -Wm-yn"$(PROJECT_NAME)"
 
-TARGET = $(ROM_BUILD_DIR)/colorlines.gb
+TARGET = $(ROM_BUILD_DIR)/$(PROJECT_NAME).gb
 
 ASRC = $(foreach dir,src,$(notdir $(wildcard $(dir)/*.s))) 
 CSRC = $(foreach dir,src,$(notdir $(wildcard $(dir)/*.c))) 
@@ -22,7 +24,7 @@ OBJS = $(CSRC:%.c=$(OBJDIR)/%.o) $(ASRC:%.s=$(OBJDIR)/%.o)
 #all:	directories release $(TARGET)
 all:	directories $(TARGET)
 
-.PHONY: clean release debug color profile directories
+.PHONY: clean release debug color profile directories rom online
 
 release:
 	$(eval CFLAGS += -Wf'--max-allocs-per-node 50000')
@@ -59,7 +61,7 @@ $(OBJDIR)/%.o:	src/%.c
 $(OBJDIR)/%.o:	src/%.s
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(ROM_BUILD_DIR)/%.gb:	$(OBJS)
+$(TARGET):	$(OBJS)
 	mkdir -p $(ROM_BUILD_DIR)
 	$(CC) $(LFLAGS) -o $@ $^
 
@@ -69,3 +71,11 @@ clean:
 	rm -rf $(ROM_BUILD_DIR)
 
 rom: $(TARGET)
+
+online: directories rom
+	@echo "PACKING for ITCH.IO"
+	rm -f $(PROJECT_NAME).zip
+	cp -f online/js-emulator.zip ./$(PROJECT_NAME).zip	
+	cp -f $(TARGET) ./	
+	7z a $(PROJECT_NAME).zip $(PROJECT_NAME).gb
+	rm -f $(PROJECT_NAME).gb
