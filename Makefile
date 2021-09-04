@@ -24,21 +24,22 @@ LCCFLAGS += -Wl-j
 # LCCFLAGS += -debug # Uncomment to enable debug output
 # LCCFLAGS += -v     # Uncomment for lcc verbose output
 
-CFLAGS = -Wf-Isrc/include
+CFLAGS = -Wf-Iinclude
 
 # You can set the name of the ROM file here
 PROJECTNAME = colorlines
 
 # EXT?=gb # Only sets extension to default (game boy .gb) if not populated
 SRCDIR      = src
+SRCPLAT     = src/$(EXT)
 OBJDIR      = obj/$(EXT)
 RESDIR      = res
 BINDIR      = build/$(EXT)
 MKDIRS      = $(OBJDIR) $(BINDIR) # See bottom of Makefile for directory auto-creation
 
 BINS	    = $(OBJDIR)/$(PROJECTNAME).$(EXT)
-CSOURCES    = $(foreach dir,$(SRCDIR),$(notdir $(wildcard $(dir)/*.c))) $(foreach dir,$(RESDIR),$(notdir $(wildcard $(dir)/*.c)))
-ASMSOURCES  = $(foreach dir,$(SRCDIR),$(notdir $(wildcard $(dir)/*.s)))
+CSOURCES    = $(foreach dir,$(SRCDIR),$(notdir $(wildcard $(dir)/*.c))) $(foreach dir,$(SRCPLAT),$(notdir $(wildcard $(dir)/*.c))) $(foreach dir,$(RESDIR),$(notdir $(wildcard $(dir)/*.c)))
+ASMSOURCES  = $(foreach dir,$(SRCDIR),$(notdir $(wildcard $(dir)/*.s))) $(foreach dir,$(SRCPLAT),$(notdir $(wildcard $(dir)/*.s)))
 OBJS        = $(CSOURCES:%.c=$(OBJDIR)/%.o) $(ASMSOURCES:%.s=$(OBJDIR)/%.o)
 
 # Builds all targets sequentially
@@ -48,8 +49,16 @@ all: $(TARGETS)
 $(OBJDIR)/%.o:	$(SRCDIR)/%.c
 	$(LCC) $(CFLAGS) -c -o $@ $<
 
+# Compile .c files in "src/<target>/" to .o object files
+$(OBJDIR)/%.o:	$(SRCPLAT)/%.c
+	$(LCC) $(CFLAGS) -c -o $@ $<
+
 # Compile .c files in "res/" to .o object files
 $(OBJDIR)/%.o:	$(RESDIR)/%.c
+	$(LCC) $(CFLAGS) -c -o $@ $<
+
+# Compile .s assembly files in "src/<target>/" to .o object files
+$(OBJDIR)/%.o:	$(SRCPLAT)/%.s
 	$(LCC) $(CFLAGS) -c -o $@ $<
 
 # Compile .s assembly files in "src/" to .o object files

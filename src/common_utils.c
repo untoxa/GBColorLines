@@ -9,7 +9,7 @@ void wait_pad_up() {
 }
 
 void clear_screen() {
-    if (_cpu == CGB_TYPE) {
+    if (DEVICE_SUPPORTS_COLOR) {
         VBK_REG = 1;
         fill_bkg_rect(0, 0, 22, 20, 0);
         VBK_REG = 0;
@@ -18,8 +18,7 @@ void clear_screen() {
 }
 
 void clear_viewport() {
-    OAM_item_t * ptr = shadow_OAM;
-    for (UBYTE i = 0; i != 40; i++) ptr->y = 0, ptr++;    
+    hide_sprites_range(0, MAX_HARDWARE_SPRITES);    
     clear_screen();
     scroll_reset();
 }

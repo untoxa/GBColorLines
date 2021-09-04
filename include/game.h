@@ -2,7 +2,7 @@
 #define __GAME_H_INCLUDE__
 
 #include <gbdk/platform.h>
-#include <gb/metasprites.h>
+#include <gbdk/metasprites.h>
 
 #include <string.h>
 #include <stdlib.h>

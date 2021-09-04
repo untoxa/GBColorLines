@@ -1,6 +1,6 @@
 #include <gbdk/platform.h>
 #include <gbdk/metasprites.h>
-#include <gb/gbdecompress.h>
+#include <gbdk/gbdecompress.h>
 
 #include <string.h>
 #include <stdlib.h>
@@ -30,7 +30,7 @@ void main() {
 
     __critical {
         TMA_REG = 0xC0u; TAC_REG = 0x07u;
-        LYC_REG = 0; STAT_REG |= 0b01000000;
+        LYC_REG = 0; STAT_REG |= STATF_LYC;
         add_LCD(scroll_update_isr);
         set_interrupts(VBL_IFLAG | TIM_IFLAG | LCD_IFLAG);
     }

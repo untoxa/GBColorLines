@@ -23,7 +23,7 @@ inline void animation_next_step() {
 
 inline void actors_animate(UBYTE anim, UBYTE mx, UBYTE my) {
     // draw selection and cursor
-    if (_cpu == CGB_TYPE) set_sprite_palette(0, 1, &sprite_palettes[(anim_curs + 1) << 2]);
+    if (DEVICE_SUPPORTS_COLOR) set_sprite_palette(0, 1, &sprite_palettes[(anim_curs + 1) << 2]);
     move_metasprite(cursor, 0x1c + (anim_curs << 2), 0, (cursor_x << 4) + 8, (cursor_y << 4) + 16);
     if (selected) {
         if (anim == 0) SOUND_JUMP;
