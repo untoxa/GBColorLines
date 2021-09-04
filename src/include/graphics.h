@@ -1,9 +1,8 @@
 #ifndef _GRAPHICS_H_INCLUDE
 #define _GRAPHICS_H_INCLUDE
 
-#include <gb/gb.h>
-#include <gb/cgb.h>
-#include <gb/metasprites.h>
+#include <gbdk/platform.h>
+#include <gbdk/metasprites.h>
 
 #include "game_types.h"
 

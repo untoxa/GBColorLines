@@ -1,7 +1,7 @@
 #ifndef _SOUND_SAMPLES_H_INCLUDE
 #define _SOUND_SAMPLES_H_INCLUDE
 
-#include <gb/gb.h>
+#include <gbdk/platform.h>
 
 typedef struct {
     UBYTE bank;

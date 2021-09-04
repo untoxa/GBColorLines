@@ -1,7 +1,7 @@
 #ifndef _LEE_H_INCLUDE
 #define _LEE_H_INCLUDE
 
-#include <gb/gb.h>
+#include <gbdk/platform.h>
 
 #define LEE_MAX_STEPS 255u
 

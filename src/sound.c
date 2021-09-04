@@ -1,4 +1,6 @@
-#include <gb/gb.h>
+#include <gbdk/platform.h>
+#include <gb/isr.h>
+
 #include <string.h>
 
 #include "hUGEDriver.h"
@@ -28,7 +30,7 @@ void music_init() {
 }
 
 UINT8 ISR_counter = 0;
-void music_update() {
+static void music_update_data() {
     play_isr();
     ISR_counter++; ISR_counter &= 3;
     if (ISR_counter) return;
@@ -43,6 +45,27 @@ void music_update() {
     // play sound
     if (music_playing) hUGE_dosound();
 }
+void music_update() __naked {
+__asm
+        push af
+        push hl
+        push bc
+        push de
+
+        call _music_update_data
+
+        pop de
+        pop bc
+        pop hl
+1$:
+        ldh a, (_STAT_REG)
+        and #STATF_BUSY
+        jr nz, 1$        
+        pop af
+        reti
+__endasm;
+}
+ISR_NESTED_VECTOR(VECTOR_TIMER, music_update)
 
 void music_play() {
     music_init();

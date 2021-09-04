@@ -1,7 +1,7 @@
 #ifndef _MYRAND_H_INCLUDE
 #define _MYRAND_H_INCLUDE
 
-#include <gb/gb.h>
+#include <gbdk/platform.h>
 
 #define MAKEMASK(A) (A) | ((A)>>1) | ((A) >> 2) | ((A) >> 3)  | ((A) >> 4) | ((A) >> 5) | ((A) >> 6) | ((A) >> 7)
 

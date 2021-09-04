@@ -1,8 +1,8 @@
 #ifndef _SCORE_H_INCLUDE
 #define _SCORE_H_INCLUDE
 
-#include <gb/gb.h>
-#include <gb/metasprites.h>
+#include <gbdk/platform.h>
+#include <gbdk/metasprites.h>
 
 #include <game_types.h> 
 

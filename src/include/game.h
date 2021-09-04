@@ -1,7 +1,7 @@
 #ifndef __GAME_H_INCLUDE__
 #define __GAME_H_INCLUDE__
 
-#include <gb/gb.h>
+#include <gbdk/platform.h>
 #include <gb/metasprites.h>
 
 #include <string.h>

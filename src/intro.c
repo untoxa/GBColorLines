@@ -20,7 +20,7 @@ game_state_e intro_run() {
 
     if (highscore) {
         UBYTE *pc = score_text + 5;
-        UBYTE len = strlen(utoa(highscore, pc));
+        UBYTE len = strlen(uitoa(highscore, pc, 10));
         while (*pc) {
             *pc++ = ((*pc - 0x21) << 1) + 0x80;
         }

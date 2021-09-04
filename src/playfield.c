@@ -164,7 +164,7 @@ void playfield_process_animation(UBYTE anim) {
     if (score != old_score) {
         old_score = score;
         UBYTE * pc = score_text + 5;
-        score_len = strlen(utoa(score, pc));
+        score_len = strlen(uitoa(score, pc, 10));
         for (UBYTE i = 0; i != SCORE_SIZE; i++, pc++) {
             score_display[i].dtile = (*pc) ? ((*pc - '0') << 1) + 0x9e : 0xfc;        
         }

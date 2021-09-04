@@ -1,7 +1,7 @@
 #ifndef _SOUND_H_INCLUDE
 #define _SOUND_H_INCLUDE
 
-#include <gb/gb.h>
+#include <gbdk/platform.h>
 
 #define ENABLE_CURSOR_SOUND 1
 

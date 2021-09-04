@@ -1,7 +1,7 @@
 #ifndef _GAME_TYPES_H_INCLUDE
 #define _GAME_TYPES_H_INCLUDE
 
-#include <gb/gb.h>
+#include <gbdk/platform.h>
 
 //#define CATSKULL_LOGO
 

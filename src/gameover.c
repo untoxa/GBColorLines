@@ -12,7 +12,7 @@ game_state_e over_run() {
     UBYTE tmp_score_text[16];
     memcpy(tmp_score_text, "SCORE:", 6);
     UBYTE *pc = tmp_score_text;
-    UBYTE len = strlen(utoa(score, tmp_score_text + 6)) + 6;
+    UBYTE len = strlen(uitoa(score, tmp_score_text + 6, 10)) + 6;
     while (*pc) {
         *pc++ = ((*pc - 0x21) << 1) + 0x80;
     }

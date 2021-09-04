@@ -1,8 +1,8 @@
 #ifndef __INTRO_H_INCLUDE__
 #define __INTRO_H_INCLUDE__
 
-#include <gb/gb.h>
-#include <gb/metasprites.h>
+#include <gbdk/platform.h>
+#include <gbdk/metasprites.h>
 
 #include <string.h>
 #include <stdlib.h>

@@ -1,7 +1,7 @@
 #ifndef _SOUND_SAMPLEPLAYER_H_INCLUDE
 #define _SOUND_SAMPLEPLAYER_H_INCLUDE
 
-#include <gb/gb.h>
+#include <gbdk/platform.h>
 
 extern UINT8 play_bank;
 extern const UINT8 * play_sample;

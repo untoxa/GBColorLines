@@ -1,8 +1,8 @@
 #ifndef _PLAYFIELD_H_INCLUDE
 #define _PLAYFIELD_H_INCLUDE
 
-#include <gb/gb.h>
-#include <gb/metasprites.h>
+#include <gbdk/platform.h>
+#include <gbdk/metasprites.h>
 
 #include "game_types.h"
 #include "myrand.h"
