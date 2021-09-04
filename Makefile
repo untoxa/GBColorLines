@@ -1,81 +1,82 @@
-GBDK = ../../gbdk
-GBDKLIB = $(GBDK)/lib/small/asxxxx
-CC = $(GBDK)/bin/lcc
+SHELL := /bin/bash
 
-CART_SIZE = 4
+# If you move this project you can change the directory
+# to match your GBDK root directory (ex: GBDK_HOME = "C:/GBDK/"
+GBDK_HOME = ../../gbdk/
+LCC = $(GBDK_HOME)bin/lcc
 
-ROM_BUILD_DIR = build
-OBJDIR = obj
-CFLAGS = -Isrc/include -Wa-Isrc/include -Wa-I$(GBDKLIB)
+# Set platforms to build here, spaced separated. (These are in the separate Makefile.targets)
+# They can also be built/cleaned individually: "make gg" and "make gg-clean"
+# Possible are: gb gbc pocket sms gg
+#TARGETS=gb pocket sms gg
+TARGETS=gb pocket
 
-PROJECT_NAME = colorlines
+# Configure platform specific LCC flags here:
+LCCFLAGS_gb      = -Wl-klib -Wl-lhUGEDriver.lib -Wl-yt0x1B -Wl-yo4 -Wl-ya1 -Wm-yS -Wm-yc
+LCCFLAGS_pocket  = -Wl-klib -Wl-lhUGEDriver.lib -Wl-yt0x1B -Wl-yo4 -Wl-ya1 -Wm-yS -Wm-yc 
+LCCFLAGS_sms     = -Wm-yS
+LCCFLAGS_gg      = -Wm-yS
 
-LFLAGS_NBANKS = -Wl-yt0x1B -Wl-yo$(CART_SIZE) -Wl-ya1 -Wl-j
+LCCFLAGS += $(LCCFLAGS_$(EXT)) # This adds the current platform specific LCC Flags
 
-LFLAGS = $(LFLAGS_NBANKS) -Wl-j -Wm-yS -Wl-klib -Wl-lhUGEDriver.lib -Wm-yc -Wm-yn"$(PROJECT_NAME)"
+# LCCFLAGS += -Wl-j -Wm-yoA -Wm-ya4 -autobank -Wb-ext=.rel -Wb-v # MBC + Autobanking related flags
+LCCFLAGS += -Wl-j
+# LCCFLAGS += -debug # Uncomment to enable debug output
+# LCCFLAGS += -v     # Uncomment for lcc verbose output
 
-TARGET = $(ROM_BUILD_DIR)/$(PROJECT_NAME).gb
+CFLAGS = -Wf-Isrc/include
 
-ASRC = $(foreach dir,src,$(notdir $(wildcard $(dir)/*.s))) 
-CSRC = $(foreach dir,src,$(notdir $(wildcard $(dir)/*.c))) 
+# You can set the name of the ROM file here
+PROJECTNAME = colorlines
 
-OBJS = $(CSRC:%.c=$(OBJDIR)/%.o) $(ASRC:%.s=$(OBJDIR)/%.o)
+# EXT?=gb # Only sets extension to default (game boy .gb) if not populated
+SRCDIR      = src
+OBJDIR      = obj/$(EXT)
+RESDIR      = res
+BINDIR      = build/$(EXT)
+MKDIRS      = $(OBJDIR) $(BINDIR) # See bottom of Makefile for directory auto-creation
 
-#all:	directories release $(TARGET)
-all:	directories $(TARGET)
+BINS	    = $(OBJDIR)/$(PROJECTNAME).$(EXT)
+CSOURCES    = $(foreach dir,$(SRCDIR),$(notdir $(wildcard $(dir)/*.c))) $(foreach dir,$(RESDIR),$(notdir $(wildcard $(dir)/*.c)))
+ASMSOURCES  = $(foreach dir,$(SRCDIR),$(notdir $(wildcard $(dir)/*.s)))
+OBJS        = $(CSOURCES:%.c=$(OBJDIR)/%.o) $(ASMSOURCES:%.s=$(OBJDIR)/%.o)
 
-.PHONY: clean release debug color profile directories rom online
+# Builds all targets sequentially
+all: $(TARGETS)
 
-release:
-	$(eval CFLAGS += -Wf'--max-allocs-per-node 50000')
-	@echo "RELEASE mode ON"
-	
-debug:
-	$(eval CFLAGS += -Wf--debug -Wl-m -Wl-w -Wl-y)
-	$(eval CFLAGS += -Wf--nolospre -Wf--nogcse)
-	$(eval LFLAGS += -Wf--debug -Wl-m -Wl-w -Wl-y)
-	@echo "DEBUG mode ON"
+# Compile .c files in "src/" to .o object files
+$(OBJDIR)/%.o:	$(SRCDIR)/%.c
+	$(LCC) $(CFLAGS) -c -o $@ $<
 
-color:
-	$(eval CFLAGS += -DCGB)
-	$(eval LFLAGS += -Wm-yC)
-	@echo "COLOR mode ON"
+# Compile .c files in "res/" to .o object files
+$(OBJDIR)/%.o:	$(RESDIR)/%.c
+	$(LCC) $(CFLAGS) -c -o $@ $<
 
-profile:
-	$(eval CFLAGS += -Wf--profile)
-	@echo "PROFILE mode ON"
+# Compile .s assembly files in "src/" to .o object files
+$(OBJDIR)/%.o:	$(SRCDIR)/%.s
+	$(LCC) $(CFLAGS) -c -o $@ $<
 
-.SECONDARY: $(OBJS) 
+# If needed, compile .c files i n"src/" to .s assembly files
+# (not required if .c is compiled directly to .o)
+$(OBJDIR)/%.s:	$(SRCDIR)/%.c
+	$(LCC) $(CFLAGS) -S -o $@ $<
 
-directories: $(ROM_BUILD_DIR) $(OBJDIR)
-
-$(ROM_BUILD_DIR):
-	mkdir -p $(ROM_BUILD_DIR)
-
-$(OBJDIR):
-	mkdir -p $(OBJDIR)
-
-$(OBJDIR)/%.o:	src/%.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-
-$(OBJDIR)/%.o:	src/%.s
-	$(CC) $(CFLAGS) -c -o $@ $<
-
-$(TARGET):	$(OBJS)
-	mkdir -p $(ROM_BUILD_DIR)
-	$(CC) $(LFLAGS) -o $@ $^
+# Link the compiled object files into a .gb ROM file
+$(BINS):	$(OBJS)
+	$(LCC) $(LCCFLAGS) $(CFLAGS) -o $(BINDIR)/$(PROJECTNAME).$(EXT) $(OBJS)
 
 clean:
-	@echo "CLEANUP..."
-	rm -rf $(OBJDIR)
-	rm -rf $(ROM_BUILD_DIR)
+	@echo Cleaning
+	@for target in $(TARGETS); do \
+		$(MAKE) $$target-clean; \
+	done
 
-rom: $(TARGET)
+# Include available build targets
+include Makefile.targets
 
-online: directories rom
-	@echo "PACKING for ITCH.IO"
-	rm -f $(PROJECT_NAME).zip
-	cp -f online/js-emulator.zip ./$(PROJECT_NAME).zip	
-	cp -f $(TARGET) ./	
-	7z a $(PROJECT_NAME).zip $(PROJECT_NAME).gb
-	rm -f $(PROJECT_NAME).gb
+
+# create necessary directories after Makefile is parsed but before build
+# info prevents the command from being pasted into the makefile
+ifneq ($(strip $(EXT)),)           # Only make the directories if EXT has been set by a target
+$(info $(shell mkdir -p $(MKDIRS)))
+endif
