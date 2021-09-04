@@ -118,15 +118,14 @@ __asm
             
             ld      HL, #_FX_ADDR_LO
             add     HL, BC
-            ld      B, #0xFF
             ld      C, (HL)     ; BC = 0xFF00 + FX_ADDR_LO[channel]
             
             lda     HL, 6(SP) // varargs
 1$:
             ld      A, (HL+)
             inc     HL
-            ld      (BC), A
-            inc     BC
+            ldh     (C), A
+            inc     C
             dec     E
             
             jr      NZ, 1$
