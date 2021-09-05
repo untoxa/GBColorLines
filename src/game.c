@@ -23,11 +23,15 @@ inline void animation_next_step() {
 
 inline void actors_animate(UBYTE anim, UBYTE mx, UBYTE my) {
     // draw selection and cursor
+#ifdef NINTENDO
     if (DEVICE_SUPPORTS_COLOR) set_sprite_palette(0, 1, &sprite_palettes[(anim_curs + 1) << 2]);
-    move_metasprite(cursor, 0x1c + (anim_curs << 2), 0, (cursor_x << 4) + 8, (cursor_y << 4) + 16);
+#endif
+    move_metasprite(cursor, 0x1c + (anim_curs << 2), 0, DEVICE_SPRITE_OFFSET_X + (cursor_x << 4), DEVICE_SPRITE_OFFSET_Y + (cursor_y << 4));
     if (selected) {
         if (anim == 0) SOUND_JUMP;
+#ifdef NINTENDO
         item[1].props = item[0].props = selected;
+#endif
         move_metasprite(item, (selected - 1) << 2, 2, mx, my);
     } else {
         hide_metasprite(item, 2);
@@ -99,11 +103,11 @@ game_state_e game_run() {
                                 lee_restore_path(cursor_x, cursor_y, path);
 
                                 // animate path 
-                                UBYTE mx = (selected_x << 4) + 8u;
-                                UBYTE my = (selected_y << 4) + 16u;
+                                UBYTE mx = DEVICE_SPRITE_OFFSET_X + (selected_x << 4);
+                                UBYTE my = DEVICE_SPRITE_OFFSET_Y + (selected_y << 4);
                                 for (UBYTE i = 0; i <= path_length; i++) {
-                                    UBYTE cx = (lee_get_coords_x(path[i]) << 4u) + 8u;
-                                    UBYTE cy = (lee_get_coords_y(path[i]) << 4u) + 16u;
+                                    UBYTE cx = DEVICE_SPRITE_OFFSET_X + (lee_get_coords_x(path[i]) << 4u);
+                                    UBYTE cy = DEVICE_SPRITE_OFFSET_Y + (lee_get_coords_y(path[i]) << 4u);
                                     while (TRUE) {
                                         if (mx < cx) mx++; else 
                                         if (mx > cx) mx--; else 
@@ -166,9 +170,11 @@ game_state_e game_run() {
                 case J_START:
                     if (score_anim == SCORE_ANIM_SIZE) score_anim = 0;
                     break;
+#ifdef NINTENDO
                 case J_SELECT:
                     toggle_sound_settings(1);
                     break;
+#endif
             }
             joy_old = joy;
         }
@@ -176,7 +182,7 @@ game_state_e game_run() {
         // next animation step
         animation_next_step();
         // animate sprites
-        actors_animate(anim, (selected_x << 4) + 8, (selected_y << 4) + 16 - animation[anim]);
+        actors_animate(anim, DEVICE_SPRITE_OFFSET_X + (selected_x << 4), DEVICE_SPRITE_OFFSET_Y + (selected_y << 4) - animation[anim]);
         // animate playfield
         playfield_process_animation(anim);
 

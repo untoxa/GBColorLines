@@ -22,34 +22,48 @@
 game_state_e game_state = game_intro;
 
 void main() {
-    NR52_REG = 0x80u;
-    NR51_REG = 0xffu;
-    NR50_REG = 0x77u;
+    sound_init();
 
     HIDE_SPRITES; HIDE_BKG;
+    SPRITES_8x16;
 
     __critical {
+#if defined(NINTENDO)
         TMA_REG = 0xC0u; TAC_REG = 0x07u;
         LYC_REG = 0; STAT_REG |= STATF_LYC;
         add_LCD(scroll_update_isr);
         set_interrupts(VBL_IFLAG | TIM_IFLAG | LCD_IFLAG);
+#elif defined(SEGA)
+        add_LCD(scroll_update_isr);
+        set_interrupts(VBL_IFLAG | LCD_IFLAG);
+#endif
     }
     toggle_sound_settings(0);
 
+#if defined(NINTENDO)
     OBP1_REG = OBP0_REG = DMG_PALETTE(DMG_WHITE, DMG_LITE_GRAY, DMG_WHITE, DMG_BLACK); 
     BGP_REG = DMG_PALETTE(DMG_WHITE, DMG_LITE_GRAY, DMG_DARK_GRAY, DMG_BLACK);
-
-    if (_cpu == CGB_TYPE) {
+    if (DEVICE_SUPPORTS_COLOR) {
         set_bkg_palette(0, 8, background_palettes);
         set_sprite_palette(0, 8, sprite_palettes);
     }
+
     gb_decompress_bkg_data(0, bkg_tiles);
-    #ifdef CATSKULL_LOGO
+#ifdef CATSKULL_LOGO
     gb_decompress_bkg_data(0x40, catskull_tiles);
-    #endif
+#endif
     gb_decompress_sprite_data(0, sprite_tiles);
 
     gb_decompress_bkg_data(0x80, font);
+#elif defined(SEGA)
+    uint8_t * buffer = (uint8_t *)0xD000;
+    set_bkg_data(0, gb_decompress(bkg_tiles, buffer) >> 4, buffer);
+    set_sprite_data(0, gb_decompress(sprite_tiles, buffer) >> 4, buffer);
+
+    uint8_t ntiles =  gb_decompress(font, buffer) >> 4;
+    set_bkg_data(0x80, ntiles, buffer);
+    set_sprite_data(0x40, ntiles, buffer);
+#endif
 
     memcpy(item, item_defaults, sizeof(item));
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) 
@@ -57,10 +71,8 @@ void main() {
 
     memcpy(score_display, score_display_defaults, sizeof(score_display));
 
-    ENABLE_RAM_MBC5;
+    ENABLE_RAM;
     highscore = score_load();
-
-    SPRITES_8x16;
 
     randomize();
     myrand_init(7, &r7);

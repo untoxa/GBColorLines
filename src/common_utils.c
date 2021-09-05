@@ -9,11 +9,13 @@ void wait_pad_up() {
 }
 
 void clear_screen() {
+#ifdef NINTENDO
     if (DEVICE_SUPPORTS_COLOR) {
         VBK_REG = 1;
         fill_bkg_rect(0, 0, 22, 20, 0);
         VBK_REG = 0;
     }
+#endif
     fill_bkg_rect(0, 0, 22, 20, 0);
 }
 

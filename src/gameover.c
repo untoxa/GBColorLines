@@ -3,8 +3,11 @@
 game_state_e over_run() {
     // clear screen;
     clear_viewport();
+
     // restore zero sprite palette
-    if (_cpu == CGB_TYPE) set_sprite_palette(0, 1, sprite_palettes);
+#ifdef NINTENDO
+    if (DEVICE_SUPPORTS_COLOR) set_sprite_palette(0, 1, sprite_palettes);
+#endif
 
     // display some background
     set_attributed_bkg_tiles(2, 6, 15, 3, intro_map, intro_attr);

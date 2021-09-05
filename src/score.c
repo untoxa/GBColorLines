@@ -10,8 +10,11 @@ UWORD score, old_score;
 UWORD highscore = 0;
 UBYTE score_len;
 
+#if defined(NINTENDO)
 sram_record_t __at(0xA000) sram_highscore;
-
+#elif defined(SEGA)
+sram_record_t __at(0xA000) sram_highscore;
+#endif
 UBYTE score_anim = SCORE_ANIM_SIZE - 1;
 
 metasprite_t score_display[SCORE_SIZE + 1];
@@ -21,7 +24,7 @@ inline UBYTE calc_crc(UWORD crc) {
 }
 
 UWORD score_load() {
-    SWITCH_RAM_MBC5(0);
+    SWITCH_RAM(0);
     if ((sram_highscore.signature != HIGHSCORE_SIGNATURE) || 
        (sram_highscore.crc != calc_crc(sram_highscore.highscore)))  {
         sram_highscore.signature = HIGHSCORE_SIGNATURE; 

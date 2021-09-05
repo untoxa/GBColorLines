@@ -134,7 +134,9 @@ UWORD playfield_get_random_coord() {
 void playfield_refresh_preview() {
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
         // put item color
+#ifdef NINTENDO
         preview_items[i][1].props = preview_items[i][0].props = preview_colors[i]; 
+#endif
         // put coord hint
         UWORD idx = preview_coords[i];        
         if (idx < PLAYFIELD_SIZE) playfield_draw_hint_item(idx % PLAYFIELD_WIDTH, idx / PLAYFIELD_HEIGHT, preview_colors[i]);
@@ -159,20 +161,24 @@ void playfield_process_animation(UBYTE anim) {
         playfield_anim++; playfield_anim &= ANIM_MASK;
     }
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
-        move_metasprite(preview_items[i], (preview_colors[i] - 1) << 2, (i << 1) + 4, 151 + animation[(playfield_anim + (i << 1)) & ANIM_MASK], 64 + (i << 4));
+        move_metasprite(preview_items[i], (preview_colors[i] - 1) << 2, (i << 1) + 4, DEVICE_SPRITE_OFFSET_X + 143 + animation[(playfield_anim + (i << 1)) & ANIM_MASK], DEVICE_SPRITE_OFFSET_Y + 48 + (i << 4));
     }
     if (score != old_score) {
         old_score = score;
         UBYTE * pc = score_text + 5;
         score_len = strlen(uitoa(score, pc, 10));
         for (UBYTE i = 0; i != SCORE_SIZE; i++, pc++) {
+#if defined(NINTENDE)
             score_display[i].dtile = (*pc) ? ((*pc - '0') << 1) + 0x9e : 0xfc;        
+#elif defined(SEGA)
+            score_display[i].dtile = (*pc) ? ((*pc - '0') << 1) + 0x5e : 0xbc;        
+#endif
         }
         score_anim = 0;
     } 
 
     if (score_anim < SCORE_ANIM_SIZE) {
-        move_metasprite(score_display, 0, 16, 160 - (score_len << 3), score_animation[score_anim]);
+        move_metasprite(score_display, 0, 16, DEVICE_SPRITE_OFFSET_X + 152 - (score_len << 3), DEVICE_SPRITE_OFFSET_Y + score_animation[score_anim] - 16);
         score_anim++;
     }
 }

@@ -3,7 +3,11 @@
 #include <rand.h>
 
 void randomize() {
+#if defined(NINTENDO)
     initarand(DIV_REG);
+#elif defined(SEGA)
+    initarand(sys_time);
+#endif
 }
 
 UINT8 myrand(myrand_state_t * state) {

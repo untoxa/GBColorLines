@@ -3,8 +3,11 @@
 game_state_e intro_run() {
     // clear screen;
     clear_viewport();
+
     // restore zero sprite palette
-    if (_cpu == CGB_TYPE) set_sprite_palette(0, 1, sprite_palettes);
+#ifdef NINTENDO
+    if (DEVICE_SUPPORTS_COLOR) set_sprite_palette(0, 1, sprite_palettes);
+#endif
 
     // display some background
     set_attributed_bkg_tiles(2, 6, 15, 3, intro_map, intro_attr);
@@ -34,16 +37,22 @@ game_state_e intro_run() {
     UBYTE wait = 0;
     while (TRUE) {
         switch (joypad()) {
-            case J_START: 
+#if defined(NINTENDO)
+            case J_START:
+#elif defined(SEGA)
+            case J_A:
+#endif 
                 wait_pad_up();
                 wait_vbl_done();
                 HIDE_SPRITES; HIDE_BKG;
                 return game_play;
+#ifdef NINTENDO
             case J_SELECT:
                 if (wait) break;
                 toggle_sound_settings(2);
                 wait = 10;
                 break;
+#endif
         }
         // animate screen
         if (sys_time & 1) {

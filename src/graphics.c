@@ -198,6 +198,7 @@ const unsigned char field_item_empty[] = {
     0x02,0x04
 };
 
+#if defined(NINTENDO)
 const unsigned int background_palettes[] = {
     RGB_BLACK, RGB_LIGHTGRAY,   RGB_DARKGRAY, RGB_WHITE,
     RGB_BLACK, RGB(15,  0,  0), RGB_DARKGRAY, RGB_RED,
@@ -219,17 +220,20 @@ const unsigned int sprite_palettes[] = {
     RGB_BLACK, RGB( 0, 15, 15), RGB_BLACK,    RGB_CYAN,
     RGB_BLACK, RGB( 9,  0,  9), RGB_BLACK,    RGB_PURPLE
 };
+#elif defined(SEGA)
+    // SEGA palette data here
+#endif
 
 const metasprite_t cursor[] = {
     {0, 0, 0, 0}, 
     {0, 8, 2, 0}, 
-    {metasprite_end}
+    METASPR_TERM
 };
 
 const metasprite_t item_defaults[] = { 
     {0, 0, 0, 0}, 
     {0, 8, 2, 0}, 
-    {metasprite_end}
+    METASPR_TERM
 };
 
 const unsigned char font[] = {
@@ -331,84 +335,84 @@ const unsigned char font[] = {
 };
 
 const metasprite_t title_C_L[] = { 
-    { 0, 0, ASCII_TO_TILE('C'), 0}, 
-    {16, 0, ASCII_TO_TILE('L'), 0}, 
-    {metasprite_end}
+    METASPR_ITEM(0, 0, ASCII_TO_TILE('C'), 0), 
+    METASPR_ITEM(16, 0, ASCII_TO_TILE('L'), 0), 
+    METASPR_TERM
 };
 
 const metasprite_t title_O_I[] = { 
-    { 0, 0, ASCII_TO_TILE('O'), 0}, 
-    {16, 0, ASCII_TO_TILE('I'), 0}, 
-    {metasprite_end}
+    METASPR_ITEM( 0, 0, ASCII_TO_TILE('O'), 0), 
+    METASPR_ITEM(16, 0, ASCII_TO_TILE('I'), 0), 
+    METASPR_TERM
 };
 
 const metasprite_t title_L_N[] = { 
-    { 0, 0, ASCII_TO_TILE('L'), 0}, 
-    {16, 0, ASCII_TO_TILE('N'), 0}, 
-    {metasprite_end}
+    METASPR_ITEM( 0, 0, ASCII_TO_TILE('L'), 0), 
+    METASPR_ITEM(16, 0, ASCII_TO_TILE('N'), 0), 
+    METASPR_TERM
 };
 
 const metasprite_t title_O_E[] = { 
-    { 0, 0, ASCII_TO_TILE('O'), 0}, 
-    {16, 0, ASCII_TO_TILE('E'), 0}, 
-    {metasprite_end}
+    METASPR_ITEM( 0, 0, ASCII_TO_TILE('O'), 0), 
+    METASPR_ITEM(16, 0, ASCII_TO_TILE('E'), 0), 
+    METASPR_TERM
 };
 
 const metasprite_t title_R_S[] = { 
-    { 0, 0, ASCII_TO_TILE('R'), 0}, 
-    {16, 0, ASCII_TO_TILE('S'), 0}, 
-    {metasprite_end}
+    METASPR_ITEM( 0, 0, ASCII_TO_TILE('R'), 0), 
+    METASPR_ITEM(16, 0, ASCII_TO_TILE('S'), 0), 
+    METASPR_TERM
 };
 
 const metasprite_t * const title[] = {title_C_L, title_O_I, title_L_N, title_O_E, title_R_S};
 
 const metasprite_t over_G_O[] = { 
-    { 0, 0, ASCII_TO_TILE('G'), 0}, 
-    {16, 0, ASCII_TO_TILE('O'), 0}, 
-    {metasprite_end}
+    METASPR_ITEM( 0, 0, ASCII_TO_TILE('G'), 0), 
+    METASPR_ITEM(16, 0, ASCII_TO_TILE('O'), 0), 
+    METASPR_TERM
 };
 
 const metasprite_t over_A_V[] = { 
-    { 0, 0, ASCII_TO_TILE('A'), 0}, 
-    {16, 0, ASCII_TO_TILE('V'), 0}, 
-    {metasprite_end}
+    METASPR_ITEM( 0, 0, ASCII_TO_TILE('A'), 0), 
+    METASPR_ITEM(16, 0, ASCII_TO_TILE('V'), 0), 
+    METASPR_TERM
 };
 
 const metasprite_t over_M_E[] = { 
-    { 0, 0, ASCII_TO_TILE('M'), 0}, 
-    {16, 0, ASCII_TO_TILE('E'), 0}, 
-    {metasprite_end}
+    METASPR_ITEM( 0, 0, ASCII_TO_TILE('M'), 0), 
+    METASPR_ITEM(16, 0, ASCII_TO_TILE('E'), 0), 
+    METASPR_TERM
 };
 
 const metasprite_t over_E_R[] = { 
-    { 0, 0, ASCII_TO_TILE('E'), 0}, 
-    {16, 0, ASCII_TO_TILE('R'), 0}, 
-    {metasprite_end}
+    METASPR_ITEM( 0, 0, ASCII_TO_TILE('E'), 0), 
+    METASPR_ITEM(16, 0, ASCII_TO_TILE('R'), 0), 
+    METASPR_TERM
 };
 
 const metasprite_t * const over[] = {over_G_O, over_A_V, over_M_E, over_E_R};
 
 const metasprite_t start_msg[] = { 
-    {0,  0, ASCII_TO_TILE('P'), 0}, 
-    {0,  8, ASCII_TO_TILE('R'), 0}, 
-    {0,  8, ASCII_TO_TILE('E'), 0}, 
-    {0,  8, ASCII_TO_TILE('S'), 0}, 
-    {0,  8, ASCII_TO_TILE('S'), 0}, 
-    {0, 16, ASCII_TO_TILE('S'), 0}, 
-    {0,  8, ASCII_TO_TILE('T'), 0}, 
-    {0,  8, ASCII_TO_TILE('A'), 0}, 
-    {0,  8, ASCII_TO_TILE('R'), 0}, 
-    {0,  8, ASCII_TO_TILE('T'), 0}, 
-    {metasprite_end}
+    METASPR_ITEM( 0,  0, ASCII_TO_TILE('P'), 0), 
+    METASPR_ITEM( 0,  8, ASCII_TO_TILE('R'), 0), 
+    METASPR_ITEM( 0,  8, ASCII_TO_TILE('E'), 0), 
+    METASPR_ITEM( 0,  8, ASCII_TO_TILE('S'), 0), 
+    METASPR_ITEM( 0,  8, ASCII_TO_TILE('S'), 0), 
+    METASPR_ITEM( 0, 16, ASCII_TO_TILE('S'), 0), 
+    METASPR_ITEM( 0,  8, ASCII_TO_TILE('T'), 0), 
+    METASPR_ITEM( 0,  8, ASCII_TO_TILE('A'), 0), 
+    METASPR_ITEM( 0,  8, ASCII_TO_TILE('R'), 0), 
+    METASPR_ITEM( 0,  8, ASCII_TO_TILE('T'), 0), 
+    METASPR_TERM
 };
 
 const metasprite_t score_display_defaults[] = {
-    {0, 8, 0xfc, 0}, 
-    {0, 8, 0xfc, 0}, 
-    {0, 8, 0xfc, 0}, 
-    {0, 8, 0xfc, 0}, 
-    {0, 8, 0xfc, 0}, 
-    {metasprite_end}
+    METASPR_ITEM( 0, 8, 0xfc, 0), 
+    METASPR_ITEM( 0, 8, 0xfc, 0), 
+    METASPR_ITEM( 0, 8, 0xfc, 0), 
+    METASPR_ITEM( 0, 8, 0xfc, 0), 
+    METASPR_ITEM( 0, 8, 0xfc, 0), 
+    METASPR_TERM
 }; 
 
 const UBYTE score_animation[SCORE_ANIM_SIZE] = {

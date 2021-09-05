@@ -38,6 +38,7 @@ PUBLISHER_TEXT\
 
 const UBYTE * scroll_text_ptr = scroll_text;
 void scroll_update_isr() {
+#ifdef NINTENDO
     switch (LYC_REG) {
         case 0:
             SCX_REG = (game_state == game_intro) ? 4 : 0; 
@@ -58,6 +59,7 @@ void scroll_update_isr() {
             LYC_REG = 0;
             break;
     }
+#endif
 }
 
 void scroll_reset() {
