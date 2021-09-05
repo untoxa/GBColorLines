@@ -31,7 +31,7 @@ PROJECTNAME = colorlines
 
 # EXT?=gb # Only sets extension to default (game boy .gb) if not populated
 SRCDIR      = src
-SRCPLAT     = src/$(EXT)
+SRCPLAT     = src/$(PORT)
 OBJDIR      = obj/$(EXT)
 RESDIR      = res
 BINDIR      = build/$(EXT)
