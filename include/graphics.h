@@ -50,6 +50,14 @@ extern const UBYTE score_animation[SCORE_ANIM_SIZE];
 #define ASCII_TO_TILE(ch) (UBYTE)(((ch) > 0x20) ? (((ch) - 0x21) << 1) + 0x40 : 0u)
 #endif
 
+inline UBYTE ascii_to_tile(UBYTE ch) {
+#if defined(NINTENDO)
+    return (ch > 0x20) ? ((ch - 0x21) << 1) + 0x80 : 0;
+#elif defined(SEGA)
+    return (ch > 0x20) ? ((ch - 0x21) << 1) + 0x40 : 0;
+#endif
+}
+
 inline void set_bkg_tiles_blank(UBYTE x, UBYTE y, UBYTE w, UBYTE h, const UBYTE * map) {
 #ifdef NINTENDO
     if (DEVICE_SUPPORTS_COLOR) {

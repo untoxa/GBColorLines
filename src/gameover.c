@@ -14,12 +14,12 @@ game_state_e over_run() {
 
     UBYTE tmp_score_text[16];
     memcpy(tmp_score_text, "SCORE:", 6);
-    UBYTE *pc = tmp_score_text;
-    UBYTE len = strlen(uitoa(score, tmp_score_text + 6, 10)) + 6;
-    while (*pc) {
-        *pc++ = ((*pc - 0x21) << 1) + 0x80;
+    uitoa(score, tmp_score_text + 6, 10);
+    UBYTE len = strlen(tmp_score_text);
+    for (UBYTE *pc = tmp_score_text; (*pc); pc++) {
+        *pc = ascii_to_tile(*pc);
     }
-    set_bkg_tiles_blank(((20 - len) >> 1) + 1, 15, len, 1, tmp_score_text); 
+    set_bkg_tiles_blank(((DEVICE_SCREEN_WIDTH - len) >> 1) + 1, 15, len, 1, tmp_score_text); 
     scroll_set_pos((len & 1) ? 4 : 8);
 
     wait_vbl_done();
@@ -52,7 +52,7 @@ game_state_e over_run() {
             playfield_anim++; playfield_anim &= ANIM_MASK;
             UBYTE base = 0;
             for (UBYTE j = 0; j != OVER_SIZE; j++) {
-                base += move_metasprite(over[j], 0, base, (j << 4) + 60, 64 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
+                base += move_metasprite(over[j], 0, base, DEVICE_SPRITE_OFFSET_X + 52 + (j << 4), DEVICE_SPRITE_OFFSET_X + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
             }
         }
         wait_vbl_done();

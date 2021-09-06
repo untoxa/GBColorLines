@@ -19,15 +19,13 @@ game_state_e intro_run() {
     }
     #endif
 
-    UBYTE start_sprite = move_metasprite(start_msg, 0, 0, 42, 104);
-
     if (highscore) {
-        UBYTE *pc = score_text + 5;
-        UBYTE len = strlen(uitoa(highscore, pc, 10));
-        while (*pc) {
-            *pc++ = ((*pc - 0x21) << 1) + 0x80;
+        uitoa(highscore, score_text + 5, 10);
+        UBYTE len = strlen(score_text);
+        for (UBYTE *pc = score_text + 5; (*pc); pc++) {
+            *pc = ascii_to_tile(*pc);
         }
-        set_bkg_tiles_blank(15 - len, 18, 5 + len, 1, score_text); 
+        set_bkg_tiles_blank(DEVICE_SCREEN_WIDTH - len, DEVICE_SCREEN_HEIGHT, len, 1, score_text); 
     }
 
     wait_vbl_done();
@@ -41,6 +39,7 @@ game_state_e intro_run() {
             case J_START:
 #elif defined(SEGA)
             case J_A:
+                clear_viewport();
 #endif 
                 wait_pad_up();
                 wait_vbl_done();
@@ -57,8 +56,7 @@ game_state_e intro_run() {
         // animate screen
         if (sys_time & 1) {
             playfield_anim++; playfield_anim &= ANIM_MASK;
-            move_metasprite(start_msg, 0, 0, DEVICE_SPRITE_OFFSET_X + 60 + animation[playfield_anim], DEVICE_SPRITE_OFFSET_Y + 88);
-            UBYTE base = start_sprite;
+            UBYTE base = move_metasprite(start_msg, 0, 0, DEVICE_SPRITE_OFFSET_X + 60 + animation[playfield_anim], DEVICE_SPRITE_OFFSET_Y + 88);
             for (UBYTE j = 0; j != TITLE_SIZE; j++) {
                 base += move_metasprite(title[j], 0, base, DEVICE_SPRITE_OFFSET_X + 44 + (j << 4), DEVICE_SPRITE_OFFSET_Y + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
             }

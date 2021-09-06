@@ -20,7 +20,7 @@ extern myrand_state_t r7;
 
 UBYTE scroll_pos_x = 0, scroll_pos_y = 0;
 const unsigned char scroll_text[] = 
-"COLOR LINES! A SMALL PUZZLE GAME FOR THE GAME BOY. "\
+"COLOR LINES! A SMALL CROSS-PLATFORM PUZZLE GAME FOR THE NINTENDO GAME BOY AND SEGA GAME GEAR. "\
 "MATCH FIVE OR MORE PIECES OF THE SAME SHAPE AND COLOR IN A LINE HORIZONTALLY, VERTICALLY OR DIAGONALLY TO SCORE POINTS. "\
 "FIRST SELECT A PIECE TO MOVE, THEN CHOOSE WHERE TO MOVE IT. WATCH OUT THOUGH, IF THERE'S NO CLEAR PATH YOU WON'T BE ABLE TO REACH YOUR DESTINATION. "\
 "EACH TURN, IF YOU FAILED TO MAKE A MATCH, THREE MORE PIECES WILL BE ADDED TO THE BOARD RANDOMLY. "\
@@ -38,7 +38,7 @@ PUBLISHER_TEXT\
 
 const UBYTE * scroll_text_ptr = scroll_text;
 void scroll_update_isr() {
-#ifdef NINTENDO
+#if defined(NINTENDO)
     switch (LYC_REG) {
         case 0:
             SCX_REG = (game_state == game_intro) ? 4 : 0; 
@@ -73,8 +73,14 @@ void scroll_set_pos(UBYTE x) {
 void scroll_process() {
     if ((scroll_pos_x & 0x07) == 0) {
         if (*scroll_text_ptr == 0) scroll_text_ptr = scroll_text;
-        set_attributed_bkg_tile_xy(((scroll_pos_x >> 3) + 20) & 0x1f, 16, ascii_to_tile(*scroll_text_ptr), myrand(&r7) + 1);
+        set_attributed_bkg_tile_xy(((scroll_pos_x >> 3) + DEVICE_SCREEN_WIDTH) & 0x1f, 16, ascii_to_tile(*scroll_text_ptr), myrand(&r7) + 1);
         scroll_text_ptr++;
     }
     scroll_pos_x++; scroll_pos_y = animation[(scroll_pos_x >> 1) & ANIM_MASK];
+#if defined(SEGA)
+    while (VCOUNTER != (SCROLL_Y_POS + (DEVICE_SCREEN_Y_OFFSET * 8))); 
+    __WRITE_VDP_REG(VDP_RSCX, -scroll_pos_x);
+    while (VCOUNTER != (SCROLL_Y_POS + (DEVICE_SCREEN_Y_OFFSET * 8) + 16));
+    __WRITE_VDP_REG(VDP_RSCX, 0);
+#endif
 }

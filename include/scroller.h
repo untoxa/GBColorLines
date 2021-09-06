@@ -5,10 +5,6 @@
 
 #define SCROLL_Y_POS (15 * 8) - 1 
 
-inline UBYTE ascii_to_tile(UBYTE ch) {
-    return (ch > 0x20) ? ((ch - 0x21) << 1) + 0x80 : 0;
-}
-
 void scroll_update_isr();
 
 void scroll_reset();

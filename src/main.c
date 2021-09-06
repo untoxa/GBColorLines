@@ -27,17 +27,14 @@ void main() {
     HIDE_SPRITES; HIDE_BKG;
     SPRITES_8x16;
 
-    __critical {
 #if defined(NINTENDO)
+    __critical {
         TMA_REG = 0xC0u; TAC_REG = 0x07u;
         LYC_REG = 0; STAT_REG |= STATF_LYC;
         add_LCD(scroll_update_isr);
         set_interrupts(VBL_IFLAG | TIM_IFLAG | LCD_IFLAG);
-#elif defined(SEGA)
-        add_LCD(scroll_update_isr);
-        set_interrupts(VBL_IFLAG | LCD_IFLAG);
-#endif
     }
+#endif
     toggle_sound_settings(0);
 
 #if defined(NINTENDO)
@@ -78,7 +75,7 @@ void main() {
 
     ntiles =  gb_decompress(font, buffer) >> 4;
     set_2bpp_palette(COMPAT_PALETTE(0, 0, 0, 1));
-    set_bkg_data(0x80, ntiles, buffer);
+    set_bkg_data(0x40, ntiles, buffer);
     set_sprite_data(0x40, ntiles, buffer);
 #endif
 
