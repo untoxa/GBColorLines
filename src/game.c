@@ -103,11 +103,11 @@ game_state_e game_run() {
                                 lee_restore_path(cursor_x, cursor_y, path);
 
                                 // animate path 
-                                UBYTE mx = DEVICE_SPRITE_OFFSET_X + (selected_x << 4);
-                                UBYTE my = DEVICE_SPRITE_OFFSET_Y + (selected_y << 4);
+                                UBYTE mx = (selected_x << 4);
+                                UBYTE my = (selected_y << 4);
                                 for (UBYTE i = 0; i <= path_length; i++) {
-                                    UBYTE cx = DEVICE_SPRITE_OFFSET_X + (lee_get_coords_x(path[i]) << 4u);
-                                    UBYTE cy = DEVICE_SPRITE_OFFSET_Y + (lee_get_coords_y(path[i]) << 4u);
+                                    UBYTE cx = lee_get_coords_x(path[i]) << 4u;
+                                    UBYTE cy = lee_get_coords_y(path[i]) << 4u;
                                     while (TRUE) {
                                         if (mx < cx) mx++; else 
                                         if (mx > cx) mx--; else 
@@ -117,7 +117,7 @@ game_state_e game_run() {
                                         // next animation step
                                         animation_next_step();
                                         // animate sprites
-                                        actors_animate(anim, mx, my - animation[anim]);
+                                        actors_animate(anim, DEVICE_SPRITE_OFFSET_X + mx, DEVICE_SPRITE_OFFSET_Y + my - animation[anim]);
                                         // animate playfield
                                         playfield_process_animation(anim);
 

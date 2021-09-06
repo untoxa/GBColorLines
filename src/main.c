@@ -53,6 +53,8 @@ void main() {
 
     gb_decompress_bkg_data(0x80, font);
 #elif defined(SEGA)
+    HIDE_LEFT_COLUMN;
+
     set_bkg_palette(0, 1, background_palettes);
     set_sprite_palette(0, 1, sprite_palettes);
 
