@@ -57,10 +57,10 @@ game_state_e intro_run() {
         // animate screen
         if (sys_time & 1) {
             playfield_anim++; playfield_anim &= ANIM_MASK;
-            move_metasprite(start_msg, 0, 0, 42 + animation[playfield_anim], 104);
+            move_metasprite(start_msg, 0, 0, DEVICE_SPRITE_OFFSET_X + 60 + animation[playfield_anim], DEVICE_SPRITE_OFFSET_Y + 88);
             UBYTE base = start_sprite;
             for (UBYTE j = 0; j != TITLE_SIZE; j++) {
-                base += move_metasprite(title[j], 0, base, (j << 4) + 52, 64 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
+                base += move_metasprite(title[j], 0, base, DEVICE_SPRITE_OFFSET_X + 44 + (j << 4), DEVICE_SPRITE_OFFSET_Y + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
             }
         }
         // process delay

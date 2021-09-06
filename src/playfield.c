@@ -168,7 +168,7 @@ void playfield_process_animation(UBYTE anim) {
         UBYTE * pc = score_text + 5;
         score_len = strlen(uitoa(score, pc, 10));
         for (UBYTE i = 0; i != SCORE_SIZE; i++, pc++) {
-#if defined(NINTENDE)
+#if defined(NINTENDO)
             score_display[i].dtile = (*pc) ? ((*pc - '0') << 1) + 0x9e : 0xfc;        
 #elif defined(SEGA)
             score_display[i].dtile = (*pc) ? ((*pc - '0') << 1) + 0x5e : 0xbc;        
@@ -178,7 +178,7 @@ void playfield_process_animation(UBYTE anim) {
     } 
 
     if (score_anim < SCORE_ANIM_SIZE) {
-        move_metasprite(score_display, 0, 16, DEVICE_SPRITE_OFFSET_X + 152 - (score_len << 3), DEVICE_SPRITE_OFFSET_Y + score_animation[score_anim] - 16);
+        move_metasprite(score_display, 0, 16, (DEVICE_SPRITE_OFFSET_X + (DEVICE_SCREEN_WIDTH - 1) * 8) - (score_len << 3), DEVICE_SPRITE_OFFSET_Y + score_animation[score_anim] - 16);
         score_anim++;
     }
 }

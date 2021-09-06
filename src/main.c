@@ -56,11 +56,28 @@ void main() {
 
     gb_decompress_bkg_data(0x80, font);
 #elif defined(SEGA)
-    uint8_t * buffer = (uint8_t *)0xD000;
-    set_bkg_data(0, gb_decompress(bkg_tiles, buffer) >> 4, buffer);
-    set_sprite_data(0, gb_decompress(sprite_tiles, buffer) >> 4, buffer);
+    set_bkg_palette(0, 1, background_palettes);
+    set_sprite_palette(0, 1, sprite_palettes);
 
-    uint8_t ntiles =  gb_decompress(font, buffer) >> 4;
+    uint8_t * buffer = (uint8_t *)0xD000;
+    uint8_t ntiles;
+
+    ntiles = gb_decompress(bkg_tiles, buffer) >> 4;
+    set_2bpp_palette(COMPAT_PALETTE(0, 0, 12, 1));
+    set_bkg_data(0, 1, buffer);
+    for (uint8_t i = 1, c = 0, *buf = buffer + 16u; i < ntiles; i += 4, c++, buf += 64u) {
+        set_2bpp_palette(background_compat_palettes[c]);
+        set_bkg_data(i, 4, buf);
+    }
+
+    ntiles = gb_decompress(sprite_tiles, buffer) >> 4;
+    for (uint8_t i = 0, c = 0, *buf = buffer; i < ntiles; i += 4, c++, buf += 64u) {
+        set_2bpp_palette(sprite_compat_palettes[c]);
+        set_sprite_data(i, 4, buf);
+    }
+
+    ntiles =  gb_decompress(font, buffer) >> 4;
+    set_2bpp_palette(COMPAT_PALETTE(0, 0, 0, 1));
     set_bkg_data(0x80, ntiles, buffer);
     set_sprite_data(0x40, ntiles, buffer);
 #endif

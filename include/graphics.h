@@ -20,10 +20,11 @@ extern const unsigned char intro_attr[];
 extern const unsigned char field_row[];
 extern const unsigned char field_item_empty[];
 
-#if defined(NINTENDO)
-extern const unsigned int background_palettes[];
-extern const unsigned int sprite_palettes[];
-#elif defined(SEGA)
+extern const palette_entry_t background_palettes[];
+extern const palette_entry_t sprite_palettes[];
+#ifdef SEGA
+extern const uint16_t background_compat_palettes[];
+extern const uint16_t sprite_compat_palettes[];
 #endif
 
 extern const metasprite_t cursor[];

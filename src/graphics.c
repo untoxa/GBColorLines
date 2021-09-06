@@ -199,7 +199,7 @@ const unsigned char field_item_empty[] = {
 };
 
 #if defined(NINTENDO)
-const unsigned int background_palettes[] = {
+const palette_entry_t background_palettes[] = {
     RGB_BLACK, RGB_LIGHTGRAY,   RGB_DARKGRAY, RGB_WHITE,
     RGB_BLACK, RGB(15,  0,  0), RGB_DARKGRAY, RGB_RED,
     RGB_BLACK, RGB( 0, 15,  0), RGB_DARKGRAY, RGB_GREEN,
@@ -210,7 +210,7 @@ const unsigned int background_palettes[] = {
     RGB_BLACK, RGB( 9,  0,  9), RGB_DARKGRAY, RGB_PURPLE
 };
 
-const unsigned int sprite_palettes[] = {
+const palette_entry_t sprite_palettes[] = {
     RGB_BLACK, RGB_LIGHTGRAY,   RGB_BLACK,    RGB_WHITE,
     RGB_BLACK, RGB(15,  0,  0), RGB_BLACK,    RGB_RED,
     RGB_BLACK, RGB( 0, 15,  0), RGB_BLACK,    RGB_GREEN,
@@ -221,7 +221,70 @@ const unsigned int sprite_palettes[] = {
     RGB_BLACK, RGB( 9,  0,  9), RGB_BLACK,    RGB_PURPLE
 };
 #elif defined(SEGA)
-    // SEGA palette data here
+const palette_entry_t background_palettes[] = {
+    RGB_BLACK,          RGB_WHITE,
+    RGB8(127,  0,  0),  RGB_RED,
+    RGB8(  0,127,  0),  RGB_GREEN,
+    RGB8(  0,  0,127),  RGB_BLUE,
+    RGB8( 63,  0,  0),  RGB_DARKRED,
+    RGB8(127,127,  0),  RGB_YELLOW,
+    RGB8(  0,127,127),  RGB_CYAN,
+    RGB8( 63,  0, 63),  RGB_PURPLE
+};
+
+const uint16_t background_compat_palettes[] = {
+    // empty
+    COMPAT_PALETTE(0, 13, 12,  1),
+    // objects
+    COMPAT_PALETTE(0,  2, 12,  3),
+    COMPAT_PALETTE(0,  4, 12,  5),
+    COMPAT_PALETTE(0,  6, 12,  7),
+    COMPAT_PALETTE(0,  8, 12,  9),
+    COMPAT_PALETTE(0, 10, 12, 11),
+    COMPAT_PALETTE(0, 12, 12, 13),
+    COMPAT_PALETTE(0, 14, 12, 15),
+    // small objects
+    COMPAT_PALETTE(0,  2, 12,  3),
+    COMPAT_PALETTE(0,  4, 12,  5),
+    COMPAT_PALETTE(0,  6, 12,  7),
+    COMPAT_PALETTE(0,  8, 12,  9),
+    COMPAT_PALETTE(0, 10, 12, 11),
+    COMPAT_PALETTE(0, 12, 12, 13),
+    COMPAT_PALETTE(0, 14, 12, 15),
+    // empty
+    COMPAT_PALETTE(0, 13, 12,  1),
+};
+
+const palette_entry_t sprite_palettes[] = {
+    RGB_BLACK,          RGB_WHITE,
+    RGB8(127,  0,  0),  RGB_RED,
+    RGB8(  0,127,  0),  RGB_GREEN,
+    RGB8(  0,  0,127),  RGB_BLUE,
+    RGB8( 63,  0,  0),  RGB_DARKRED,
+    RGB8(127,127,  0),  RGB_YELLOW,
+    RGB8(  0,127,127),  RGB_CYAN,
+    RGB8( 63,  0, 63),  RGB_PURPLE
+};
+
+const uint16_t sprite_compat_palettes[] = {
+    // objects
+    COMPAT_PALETTE(0,  2,  0,  3),
+    COMPAT_PALETTE(0,  4,  0,  5),
+    COMPAT_PALETTE(0,  6,  0,  7),
+    COMPAT_PALETTE(0,  8,  0,  9),
+    COMPAT_PALETTE(0, 10,  0, 11),
+    COMPAT_PALETTE(0, 12,  0, 13),
+    COMPAT_PALETTE(0, 14,  0, 15),
+    // cursor
+    COMPAT_PALETTE(0, 12,  1, 13),
+    COMPAT_PALETTE(0, 12,  1, 13),
+    COMPAT_PALETTE(0, 12,  1, 13),
+    COMPAT_PALETTE(0, 12,  1, 13),
+    COMPAT_PALETTE(0, 12,  1, 13),
+    COMPAT_PALETTE(0, 12,  1, 13),
+    COMPAT_PALETTE(0, 12,  1, 13)
+};
+
 #endif
 
 const metasprite_t cursor[] = {
@@ -398,7 +461,7 @@ const metasprite_t start_msg[] = {
     METASPR_ITEM( 0,  8, ASCII_TO_TILE('E'), 0), 
     METASPR_ITEM( 0,  8, ASCII_TO_TILE('S'), 0), 
     METASPR_ITEM( 0,  8, ASCII_TO_TILE('S'), 0), 
-    METASPR_ITEM( 0, 16, ASCII_TO_TILE('S'), 0), 
+    METASPR_ITEM(16,-32, ASCII_TO_TILE('S'), 0), 
     METASPR_ITEM( 0,  8, ASCII_TO_TILE('T'), 0), 
     METASPR_ITEM( 0,  8, ASCII_TO_TILE('A'), 0), 
     METASPR_ITEM( 0,  8, ASCII_TO_TILE('R'), 0), 
