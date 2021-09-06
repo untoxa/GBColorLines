@@ -4,9 +4,11 @@ game_state_e over_run() {
     // clear screen;
     clear_viewport();
 
+#if defined(NINTENDO)
     // restore zero sprite palette
-#ifdef NINTENDO
     if (DEVICE_SUPPORTS_COLOR) set_sprite_palette(0, 1, sprite_palettes);
+#elif defined(SEGA)
+    wait_pad_up();      // wait pad is up before drawing on sega
 #endif
 
     // display some background
@@ -22,11 +24,14 @@ game_state_e over_run() {
     set_bkg_tiles_blank(((DEVICE_SCREEN_WIDTH - len) >> 1) + 1, 15, len, 1, tmp_score_text); 
     scroll_set_pos((len & 1) ? 4 : 8);
 
+#if defined(NINTENDO)
     wait_vbl_done();
+#endif
     SHOW_SPRITES; SHOW_BKG;
 
-    // wait pad is up
-    wait_pad_up();
+#if defined(NINTENDO)
+    wait_pad_up();      // wait pad is up after drawing on the game boy
+#endif
 
     UBYTE wait = 0;
     while (TRUE) {
@@ -55,7 +60,7 @@ game_state_e over_run() {
             playfield_anim++; playfield_anim &= ANIM_MASK;
             UBYTE base = 0;
             for (UBYTE j = 0; j != OVER_SIZE; j++) {
-                base += move_metasprite(over[j], 0, base, DEVICE_SPRITE_OFFSET_X + 52 + (j << 4), DEVICE_SPRITE_OFFSET_X + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
+                base += move_metasprite(over[j], 0, base, DEVICE_SPRITE_OFFSET_X + 52 + (j << 4), DEVICE_SPRITE_OFFSET_Y + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
             }
         }
 
