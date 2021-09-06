@@ -34,6 +34,12 @@ extern const unsigned char font[];
 
 #define TITLE_SIZE 5
 extern const metasprite_t * const title[];
+
+#if defined(NINTENDO) 
+#define START_MSG_WIDTH 11
+#elif defined(SEGA)
+#define START_MSG_WIDTH 7
+#endif 
 extern const metasprite_t start_msg[];
 
 #define OVER_SIZE 4

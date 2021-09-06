@@ -59,7 +59,7 @@ game_state_e intro_run() {
             UBYTE base = move_metasprite(start_msg, 
                                          0, 
                                          0, 
-                                         (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_OFFSET_X + 60 + animation[playfield_anim], 
+                                         DEVICE_SPRITE_OFFSET_X + ((DEVICE_SCREEN_WIDTH - START_MSG_WIDTH) << 2) + animation[playfield_anim], 
                                          DEVICE_SPRITE_OFFSET_Y + 88);
             for (UBYTE j = 0; j != TITLE_SIZE; j++) {
                 base += move_metasprite(title[j], 

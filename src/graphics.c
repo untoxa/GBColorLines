@@ -460,12 +460,16 @@ const metasprite_t start_msg[] = {
     METASPR_ITEM( 0,  8, ASCII_TO_TILE('R'), 0), 
     METASPR_ITEM( 0,  8, ASCII_TO_TILE('E'), 0), 
     METASPR_ITEM( 0,  8, ASCII_TO_TILE('S'), 0), 
-    METASPR_ITEM( 0,  8, ASCII_TO_TILE('S'), 0), 
-    METASPR_ITEM(16,-32, ASCII_TO_TILE('S'), 0), 
+    METASPR_ITEM( 0,  8, ASCII_TO_TILE('S'), 0),
+#if defined(NINTENDO) 
+    METASPR_ITEM( 0, 16, ASCII_TO_TILE('S'), 0), 
     METASPR_ITEM( 0,  8, ASCII_TO_TILE('T'), 0), 
     METASPR_ITEM( 0,  8, ASCII_TO_TILE('A'), 0), 
     METASPR_ITEM( 0,  8, ASCII_TO_TILE('R'), 0), 
-    METASPR_ITEM( 0,  8, ASCII_TO_TILE('T'), 0), 
+    METASPR_ITEM( 0,  8, ASCII_TO_TILE('T'), 0),
+#elif defined(SEGA)
+    METASPR_ITEM( 0, 16, ASCII_TO_TILE('1'), 0), 
+#endif 
     METASPR_TERM
 };
 
