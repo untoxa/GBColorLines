@@ -27,7 +27,7 @@ UBYTE lee_test_collision(UBYTE x, UBYTE y) {
 
 void playfield_draw() {
     for (UBYTE i = 0; i < (PLAYFIELD_HEIGHT * 2); i+=2) {
-        set_bkg_tiles_blank(0, i, 18, 2, field_row);
+        set_bkg_tiles_blank(FIELD_OFFSET_X, FIELD_OFFSET_Y + i, 18, 2, field_row);
     }
 }
 
@@ -35,7 +35,7 @@ void playfield_draw_item(UBYTE x, UBYTE y, UBYTE color) {
     UBYTE attr = color & 0x07u;
     UBYTE attributes[4] = {attr, attr, attr, attr};
     UBYTE tiles[4] = {(attr << 2) + 0x01, (attr << 2) + 0x03, (attr << 2) + 0x02, (attr << 2) + 0x04};
-    set_attributed_bkg_tiles(x << 1, y << 1, 2, 2, tiles, attributes);    
+    set_attributed_bkg_tiles(FIELD_OFFSET_X + (x << 1), FIELD_OFFSET_Y + (y << 1), 2, 2, tiles, attributes);    
 }
 
 void playfield_draw_hint_item(UBYTE x, UBYTE y, UBYTE color) {
@@ -43,7 +43,7 @@ void playfield_draw_hint_item(UBYTE x, UBYTE y, UBYTE color) {
         UBYTE attr = color & 0x07u;
         UBYTE attributes[4] = {attr, attr, attr, attr};
         UBYTE tiles[4] = {(attr << 2) + 0x1d, (attr << 2) + 0x1f, (attr << 2) + 0x1e, (attr << 2) + 0x20};
-        set_attributed_bkg_tiles(x << 1, y << 1, 2, 2, tiles, attributes);
+        set_attributed_bkg_tiles(FIELD_OFFSET_X + (x << 1), FIELD_OFFSET_Y + (y << 1), 2, 2, tiles, attributes);
     }    
 }
 
@@ -161,20 +161,28 @@ void playfield_process_animation(UBYTE anim) {
         playfield_anim++; playfield_anim &= ANIM_MASK;
     }
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
-        move_metasprite(preview_items[i], (preview_colors[i] - 1) << 2, (i << 1) + 4, DEVICE_SPRITE_OFFSET_X + 143 + animation[(playfield_anim + (i << 1)) & ANIM_MASK], DEVICE_SPRITE_OFFSET_Y + 48 + (i << 4));
+        move_metasprite(preview_items[i], 
+                        (preview_colors[i] - 1) << 2, 
+                        (i << 1) + 4, 
+                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_OFFSET_X + 143 + animation[(playfield_anim + (i << 1)) & ANIM_MASK], 
+                        (FIELD_OFFSET_Y << 3) + DEVICE_SPRITE_OFFSET_Y + 48 + (i << 4));
     }
     if (score != old_score) {
         old_score = score;
         UBYTE * pc = score_text + 5;
         score_len = strlen(uitoa(score, pc, 10));
-        for (UBYTE i = 0; i != SCORE_SIZE; i++, pc++) {
-            score_display[i].dtile = ascii_to_tile(*pc);
+        for (UBYTE i = 0; i != SCORE_SIZE; i++) {
+            score_display[i].dtile = (*pc) ? ascii_to_tile(*pc++) : 0x38u;
         }
         score_anim = 0;
     } 
 
     if (score_anim < SCORE_ANIM_SIZE) {
-        move_metasprite(score_display, 0, 16, (DEVICE_SPRITE_OFFSET_X + (DEVICE_SCREEN_WIDTH - 1) * 8) - (score_len << 3), DEVICE_SPRITE_OFFSET_Y + score_animation[score_anim] - 16);
+        move_metasprite(score_display, 
+                        0, 
+                        16, 
+                        (DEVICE_SPRITE_OFFSET_X + (DEVICE_SCREEN_WIDTH - 1) * 8) - (score_len << 3), 
+                        DEVICE_SPRITE_OFFSET_Y + score_animation[score_anim] - 16);
         score_anim++;
     }
 }

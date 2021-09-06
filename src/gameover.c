@@ -12,7 +12,7 @@ game_state_e over_run() {
 #endif
 
     // display some background
-    set_attributed_bkg_tiles(2, 6, 15, 3, intro_map, intro_attr);
+    set_attributed_bkg_tiles(FIELD_OFFSET_X + 2, 6, 15, 3, intro_map, intro_attr);
 
     UBYTE tmp_score_text[16];
     memcpy(tmp_score_text, "SCORE:", 6);
@@ -60,7 +60,11 @@ game_state_e over_run() {
             playfield_anim++; playfield_anim &= ANIM_MASK;
             UBYTE base = 0;
             for (UBYTE j = 0; j != OVER_SIZE; j++) {
-                base += move_metasprite(over[j], 0, base, DEVICE_SPRITE_OFFSET_X + 52 + (j << 4), DEVICE_SPRITE_OFFSET_Y + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
+                base += move_metasprite(over[j], 
+                                        0, 
+                                        base, 
+                                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_OFFSET_X + 52 + (j << 4), 
+                                        DEVICE_SPRITE_OFFSET_Y + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
             }
         }
 

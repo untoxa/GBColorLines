@@ -46,8 +46,17 @@ extern const UBYTE score_animation[SCORE_ANIM_SIZE];
 
 #if defined(NINTENDO)
 #define ASCII_TO_TILE(ch) (UBYTE)(((ch) > 0x20) ? (((ch) - 0x21) << 1) + 0x80 : 0u)
+#define FIELD_OFFSET_X 0
+#define FIELD_OFFSET_Y 0
 #elif defined(SEGA)
 #define ASCII_TO_TILE(ch) (UBYTE)(((ch) > 0x20) ? (((ch) - 0x21) << 1) + 0x40 : 0u)
+#if defined(MASTERSYSTEM)
+#define FIELD_OFFSET_X 6
+#define FIELD_OFFSET_Y 3
+#elif defined(GAMEGEAR)
+#define FIELD_OFFSET_X 0
+#define FIELD_OFFSET_Y 0
+#endif
 #endif
 
 inline UBYTE ascii_to_tile(UBYTE ch) {
