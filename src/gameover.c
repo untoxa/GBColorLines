@@ -38,7 +38,10 @@ game_state_e over_run() {
                 toggle_sound_settings(2);
                 wait = 10;
                 break;
-            default: 
+            default:
+#if defined(SEGA)
+                clear_viewport();
+#endif 
                 wait_pad_up();
                 wait_vbl_done();
                 HIDE_SPRITES; HIDE_BKG;
@@ -55,6 +58,14 @@ game_state_e over_run() {
                 base += move_metasprite(over[j], 0, base, DEVICE_SPRITE_OFFSET_X + 52 + (j << 4), DEVICE_SPRITE_OFFSET_X + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
             }
         }
+
+#if defined(SEGA)
+    while (VCOUNTER != (SCROLL_Y_POS + (DEVICE_SCREEN_Y_OFFSET * 8))); 
+    __WRITE_VDP_REG(VDP_RSCX, -scroll_get_pos());
+    while (VCOUNTER != (SCROLL_Y_POS + (DEVICE_SCREEN_Y_OFFSET * 8) + 16));
+    __WRITE_VDP_REG(VDP_RSCX, 0);
+#endif
+
         wait_vbl_done();
     }
 }

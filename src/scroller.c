@@ -70,6 +70,11 @@ void scroll_set_pos(UBYTE x) {
     scroll_pos_x = x;
 }
 
+UBYTE scroll_get_pos() {
+    return scroll_pos_x;
+}
+
+
 void scroll_process() {
     if ((scroll_pos_x & 0x07) == 0) {
         if (*scroll_text_ptr == 0) scroll_text_ptr = scroll_text;

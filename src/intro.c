@@ -64,8 +64,9 @@ game_state_e intro_run() {
         // process delay
         if (wait) wait--;
 
-        wait_vbl_done();
         // process scroll
         scroll_process();
+
+        wait_vbl_done();
     }
 }

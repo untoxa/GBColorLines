@@ -9,6 +9,7 @@ void scroll_update_isr();
 
 void scroll_reset();
 void scroll_set_pos(UBYTE x);
+UBYTE scroll_get_pos();
 void scroll_process();
 
 #endif
