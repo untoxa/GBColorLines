@@ -13,7 +13,7 @@ UBYTE score_len;
 #if defined(NINTENDO)
 sram_record_t __at(0xA000) sram_highscore;
 #elif defined(SEGA)
-sram_record_t __at(0xA000) sram_highscore;
+sram_record_t __at(0x8000) sram_highscore;
 #endif
 UBYTE score_anim = SCORE_ANIM_SIZE - 1;
 

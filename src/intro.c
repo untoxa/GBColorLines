@@ -25,7 +25,11 @@ game_state_e intro_run() {
         for (UBYTE *pc = score_text + 5; (*pc); pc++) {
             *pc = ascii_to_tile(*pc);
         }
+#if defined(NINTENDO)
         set_bkg_tiles_blank(DEVICE_SCREEN_WIDTH - len, DEVICE_SCREEN_HEIGHT, len, 1, score_text); 
+#elif defined(SEGA)
+        set_bkg_tiles_blank(DEVICE_SCREEN_WIDTH - len, DEVICE_SCREEN_HEIGHT - 1, len, 1, score_text); 
+#endif
     }
 
     wait_vbl_done();
