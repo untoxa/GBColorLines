@@ -39,12 +39,11 @@ game_state_e intro_run() {
     UBYTE wait = 0;
     while (TRUE) {
         switch (joypad()) {
-#if defined(NINTENDO)
             case J_START:
-#elif defined(SEGA)
+#if defined(GAMEGEAR)
             case J_A:
-                clear_viewport();
 #endif 
+                clear_viewport();
                 wait_pad_up();
                 wait_vbl_done();
                 HIDE_SPRITES; HIDE_BKG;

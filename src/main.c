@@ -22,6 +22,8 @@
 game_state_e game_state = game_intro;
 
 void main() {
+    DISPLAY_OFF;
+
     sound_init();
 
     HIDE_SPRITES; HIDE_BKG;
@@ -92,6 +94,8 @@ void main() {
 
     randomize();
     myrand_init(7, &r7);
+
+    DISPLAY_ON;
 
     while (TRUE) {
         switch (game_state) {

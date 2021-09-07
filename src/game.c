@@ -173,9 +173,11 @@ game_state_e game_run() {
                     }
                     playfield_randomize_preview();
                     break;
+#ifndef MASTERSYSTEM
                 case J_START:
                     if (score_anim == SCORE_ANIM_SIZE) score_anim = 0;
                     break;
+#endif
 #ifdef NINTENDO
                 case J_SELECT:
                     toggle_sound_settings(1);
