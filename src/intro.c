@@ -62,14 +62,14 @@ game_state_e intro_run() {
             UBYTE base = move_metasprite(start_msg, 
                                          0, 
                                          0, 
-                                         DEVICE_SPRITE_OFFSET_X + ((DEVICE_SCREEN_WIDTH - START_MSG_WIDTH) << 2) + animation[playfield_anim], 
-                                         DEVICE_SPRITE_OFFSET_Y + 88);
+                                         DEVICE_SPRITE_PX_OFFSET_X + ((DEVICE_SCREEN_WIDTH - START_MSG_WIDTH) << 2) + animation[playfield_anim], 
+                                         DEVICE_SPRITE_PX_OFFSET_Y + 88);
             for (UBYTE j = 0; j != TITLE_SIZE; j++) {
                 base += move_metasprite(title[j], 
                                         0, 
                                         base, 
-                                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_OFFSET_X + 44 + (j << 4), 
-                                        DEVICE_SPRITE_OFFSET_Y + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
+                                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_PX_OFFSET_X + 44 + (j << 4), 
+                                        DEVICE_SPRITE_PX_OFFSET_Y + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
             }
         }
         // process delay

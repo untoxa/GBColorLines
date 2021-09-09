@@ -29,8 +29,8 @@ inline void actors_animate(UBYTE anim, UBYTE mx, UBYTE my) {
     move_metasprite(cursor, 
                     0x1c + (anim_curs << 2), 
                     0, 
-                    (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_OFFSET_X + (cursor_x << 4), 
-                    (FIELD_OFFSET_Y << 3) + DEVICE_SPRITE_OFFSET_Y + (cursor_y << 4));
+                    (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_PX_OFFSET_X + (cursor_x << 4), 
+                    (FIELD_OFFSET_Y << 3) + DEVICE_SPRITE_PX_OFFSET_Y + (cursor_y << 4));
     if (selected) {
         if (anim == 0) SOUND_JUMP;
 #ifdef NINTENDO
@@ -122,8 +122,8 @@ game_state_e game_run() {
                                         animation_next_step();
                                         // animate sprites
                                         actors_animate(anim, 
-                                                       (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_OFFSET_X + mx, 
-                                                       (FIELD_OFFSET_Y << 3) + DEVICE_SPRITE_OFFSET_Y + my - animation[anim]);
+                                                       (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_PX_OFFSET_X + mx, 
+                                                       (FIELD_OFFSET_Y << 3) + DEVICE_SPRITE_PX_OFFSET_Y + my - animation[anim]);
                                         // animate playfield
                                         playfield_process_animation(anim);
 
@@ -191,8 +191,8 @@ game_state_e game_run() {
         animation_next_step();
         // animate sprites
         actors_animate(anim, 
-                       (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_OFFSET_X + (selected_x << 4), 
-                       (FIELD_OFFSET_Y << 3) + DEVICE_SPRITE_OFFSET_Y + (selected_y << 4) - animation[anim]);
+                       (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_PX_OFFSET_X + (selected_x << 4), 
+                       (FIELD_OFFSET_Y << 3) + DEVICE_SPRITE_PX_OFFSET_Y + (selected_y << 4) - animation[anim]);
         // animate playfield
         playfield_process_animation(anim);
 

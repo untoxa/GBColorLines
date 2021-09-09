@@ -164,8 +164,8 @@ void playfield_process_animation(UBYTE anim) {
         move_metasprite(preview_items[i], 
                         (preview_colors[i] - 1) << 2, 
                         (i << 1) + 4, 
-                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_OFFSET_X + 143 + animation[(playfield_anim + (i << 1)) & ANIM_MASK], 
-                        (FIELD_OFFSET_Y << 3) + DEVICE_SPRITE_OFFSET_Y + 48 + (i << 4));
+                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_PX_OFFSET_X + 143 + animation[(playfield_anim + (i << 1)) & ANIM_MASK], 
+                        (FIELD_OFFSET_Y << 3) + DEVICE_SPRITE_PX_OFFSET_Y + 48 + (i << 4));
     }
     if (score != old_score) {
         old_score = score;
@@ -181,8 +181,8 @@ void playfield_process_animation(UBYTE anim) {
         move_metasprite(score_display, 
                         0, 
                         16, 
-                        (DEVICE_SPRITE_OFFSET_X + (DEVICE_SCREEN_WIDTH - 1) * 8) - (score_len << 3), 
-                        DEVICE_SPRITE_OFFSET_Y + score_animation[score_anim] - 16);
+                        (DEVICE_SPRITE_PX_OFFSET_X + (DEVICE_SCREEN_WIDTH - 1) * 8) - (score_len << 3), 
+                        DEVICE_SPRITE_PX_OFFSET_Y + score_animation[score_anim] - 16);
         score_anim++;
     }
 }

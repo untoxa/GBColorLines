@@ -63,8 +63,8 @@ game_state_e over_run() {
                 base += move_metasprite(over[j], 
                                         0, 
                                         base, 
-                                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_OFFSET_X + 52 + (j << 4), 
-                                        DEVICE_SPRITE_OFFSET_Y + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
+                                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_PX_OFFSET_X + 52 + (j << 4), 
+                                        DEVICE_SPRITE_PX_OFFSET_Y + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
             }
         }
 
