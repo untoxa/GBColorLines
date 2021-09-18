@@ -199,7 +199,7 @@ const unsigned char field_item_empty[] = {
 };
 
 #if defined(NINTENDO)
-const palette_entry_t background_palettes[] = {
+const palette_color_t background_palettes[] = {
     RGB_BLACK, RGB_LIGHTGRAY,   RGB_DARKGRAY, RGB_WHITE,
     RGB_BLACK, RGB(15,  0,  0), RGB_DARKGRAY, RGB_RED,
     RGB_BLACK, RGB( 0, 15,  0), RGB_DARKGRAY, RGB_GREEN,
@@ -210,7 +210,7 @@ const palette_entry_t background_palettes[] = {
     RGB_BLACK, RGB( 9,  0,  9), RGB_DARKGRAY, RGB_PURPLE
 };
 
-const palette_entry_t sprite_palettes[] = {
+const palette_color_t sprite_palettes[] = {
     RGB_BLACK, RGB_LIGHTGRAY,   RGB_BLACK,    RGB_WHITE,
     RGB_BLACK, RGB(15,  0,  0), RGB_BLACK,    RGB_RED,
     RGB_BLACK, RGB( 0, 15,  0), RGB_BLACK,    RGB_GREEN,
@@ -221,7 +221,7 @@ const palette_entry_t sprite_palettes[] = {
     RGB_BLACK, RGB( 9,  0,  9), RGB_BLACK,    RGB_PURPLE
 };
 #elif defined(SEGA)
-const palette_entry_t background_palettes[] = {
+const palette_color_t background_palettes[] = {
     RGB_BLACK,          RGB_WHITE,
     RGB8(127,  0,  0),  RGB_RED,
     RGB8(  0,127,  0),  RGB_GREEN,
@@ -255,7 +255,7 @@ const uint16_t background_compat_palettes[] = {
     COMPAT_PALETTE(0, 13, 12,  1),
 };
 
-const palette_entry_t sprite_palettes[] = {
+const palette_color_t sprite_palettes[] = {
     RGB_BLACK,          RGB_WHITE,
     RGB8(127,  0,  0),  RGB_RED,
     RGB8(  0,127,  0),  RGB_GREEN,
