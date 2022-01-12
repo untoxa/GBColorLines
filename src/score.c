@@ -30,6 +30,7 @@ UWORD score_load() {
         sram_highscore.signature = HIGHSCORE_SIGNATURE; 
         sram_highscore.highscore = 0;
         sram_highscore.crc = calc_crc(0);
+        return 0;
     }
     return sram_highscore.highscore;
 }
@@ -37,7 +38,8 @@ UWORD score_load() {
 UWORD score_save(UWORD score) {
     sram_highscore.signature = HIGHSCORE_SIGNATURE;
     sram_highscore.crc = calc_crc(score);
-    return sram_highscore.highscore = score;
+    sram_highscore.highscore = score;
+    return score;
 }
 
 UBYTE score_add(UBYTE addend) {
