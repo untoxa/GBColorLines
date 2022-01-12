@@ -24,7 +24,7 @@ LCCFLAGS += -Wl-j
 # LCCFLAGS += -debug # Uncomment to enable debug output
 # LCCFLAGS += -v     # Uncomment for lcc verbose output
 
-CFLAGS = -Wf-Iinclude
+CFLAGS = -Wf-Iinclude -Wf-MMD
 
 # You can set the name of the ROM file here
 PROJECTNAME = colorlines
@@ -44,6 +44,11 @@ OBJS        = $(CSOURCES:%.c=$(OBJDIR)/%.o) $(ASMSOURCES:%.s=$(OBJDIR)/%.o)
 
 # Builds all targets sequentially
 all: $(TARGETS)
+
+# Dependencies
+DEPS = $(OBJS:%.o=%.d)
+
+-include $(DEPS)
 
 # Compile .c files in "src/" to .o object files
 $(OBJDIR)/%.o:	$(SRCDIR)/%.c
