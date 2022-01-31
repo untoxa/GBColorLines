@@ -40,7 +40,7 @@ void music_update();
     #define SOUND_POP
 #endif
 
-void sound_play(UBYTE channel, UBYTE mute_frames, ...);
+void sound_play(UBYTE channel, UBYTE mute_frames, ...) OLDCALL;
 
 #define SOUND_ON 0x01
 #define MUSIC_ON 0x02

@@ -52,6 +52,7 @@ static void music_update_data() {
     if (music_playing) hUGE_dosound();
 }
 void music_update() NAKED {
+#ifndef __INTELLISENSE__
 __asm
         push af
         push hl
@@ -70,6 +71,7 @@ __asm
         pop af
         reti
 __endasm;
+#endif
 }
 ISR_NESTED_VECTOR(VECTOR_TIMER, music_update)
 
@@ -90,8 +92,9 @@ void music_stop() {
 const UINT8 const FX_REG_SIZES[] = {5, 4, 5, 4, 3};
 const UINT8 const FX_ADDR_LO[]   = {0x10, 0x16, 0x1A, 0x20, 0x24};
 
-void sound_play(UBYTE channel, UINT8 mute_frames, ...) NAKED {
+void sound_play(UBYTE channel, UINT8 mute_frames, ...) NAKED OLDCALL {
     channel; mute_frames;
+#ifndef __INTELLISENSE__
 __asm
             ld      A, (#_sound_playing)
             or      A
@@ -139,4 +142,5 @@ __asm
             pop     BC
             ret
 __endasm;
+#endif
 }

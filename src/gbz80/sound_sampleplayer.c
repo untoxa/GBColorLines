@@ -5,6 +5,7 @@ const UINT8 * play_sample = 0;
 UINT16 play_length = 0;
 
 void play_isr() NONBANKED NAKED {
+#ifndef __INTELLISENSE__
 __asm
         ld hl, #_play_length    ; something left to play?
         ld a, (hl+)
@@ -70,6 +71,7 @@ _wave_addr = _wave_addr + 1
         ld (#_hUGE_current_wave), a
         ret
 __endasm;
+#endif
 }
 
 void set_sample(UINT8 bank, const UINT8 * sample, UINT16 length) NONBANKED CRITICAL {
