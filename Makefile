@@ -12,10 +12,11 @@ LCC = $(GBDK_HOME)bin/lcc
 TARGETS=gb pocket gg sms
 
 # Configure platform specific LCC flags here:
-LCCFLAGS_gb      = -Wl-klib -Wl-lhUGEDriver.lib -Wl-yt0x1B -Wl-yo4 -Wl-ya1 -Wm-yS -Wm-yc -Wm-yn"$(PROJECTNAME)"
-LCCFLAGS_pocket  = -Wl-klib -Wl-lhUGEDriver.lib -Wl-yt0x1B -Wl-yo4 -Wl-ya1 -Wm-yS -Wm-yc -Wm-yn"$(PROJECTNAME)"
-LCCFLAGS_sms     = -Wl-yo4 -Wm-yS
-LCCFLAGS_gg      = -Wl-yo4 -Wm-yS
+#LCCFLAGS_gb      = -Wl-klib/gbz80 -Wl-lhUGEDriver.lib -Wl-yt0x1B -Wl-yo4 -Wl-ya1 -Wm-yS -Wm-yc -Wm-yn"$(PROJECTNAME)"
+LCCFLAGS_gb      = -Wl-klib/gbz80 -Wl-lhUGEDriver.lib -Wl-ltiny_flasher.lib -Wm-yS -Wm-yc -Wm-yn"$(PROJECTNAME)"
+LCCFLAGS_pocket  = -Wl-klib/gbz80 -Wl-lhUGEDriver.lib -Wl-yt0x1B -Wl-yo4 -Wl-ya1 -Wm-yS -Wm-yc -Wm-yn"$(PROJECTNAME)"
+LCCFLAGS_sms     = -Wl-yo4 -Wm-yS -Wm-yS
+LCCFLAGS_gg      = -Wl-yo4 -Wm-yS -Wm-yS
 
 LCCFLAGS += $(LCCFLAGS_$(EXT)) # This adds the current platform specific LCC Flags
 
@@ -24,7 +25,12 @@ LCCFLAGS += -Wl-j
 # LCCFLAGS += -debug # Uncomment to enable debug output
 # LCCFLAGS += -v     # Uncomment for lcc verbose output
 
-CFLAGS = -Wf-Iinclude -Wf-MMD
+CFLAGS_gb        = -DREFLASH
+CFLAGS_pocket    =
+CFLAGS_sms       =
+CFLAGS_gg        =
+
+CFLAGS = -Wf-Iinclude -Wf-MMD $(CFLAGS_$(EXT))
 
 # You can set the name of the ROM file here
 PROJECTNAME = colorlines

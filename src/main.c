@@ -30,7 +30,7 @@ void main() {
     SPRITES_8x16;
 
 #if defined(NINTENDO)
-    __critical {
+    CRITICAL {
         TMA_REG = 0xC0u; TAC_REG = 0x07u;
         LYC_REG = 0; STAT_REG |= STATF_LYC;
         add_LCD(scroll_update_isr);

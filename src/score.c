@@ -11,9 +11,14 @@ UWORD highscore = 0;
 UBYTE score_len;
 
 #if defined(NINTENDO)
-sram_record_t __at(0xA000) sram_highscore;
+#if defined(REFLASH)
+#include "flasher.h"
+sram_record_t sram_highscore;
+#else
+sram_record_t AT(0xA000) sram_highscore;
+#endif
 #elif defined(SEGA)
-sram_record_t __at(0x8000) sram_highscore;
+sram_record_t AT(0x8000) sram_highscore;
 #endif
 UBYTE score_anim = SCORE_ANIM_SIZE - 1;
 
@@ -24,7 +29,11 @@ inline UBYTE calc_crc(UWORD crc) {
 }
 
 UWORD score_load() {
+#if defined(REFLASH)
+    flash_restore_data((void *)&sram_highscore, sizeof(sram_highscore));
+#else
     SWITCH_RAM(0);
+#endif
     if ((sram_highscore.signature != HIGHSCORE_SIGNATURE) || 
        (sram_highscore.crc != calc_crc(sram_highscore.highscore)))  {
         sram_highscore.signature = HIGHSCORE_SIGNATURE; 
@@ -39,6 +48,9 @@ UWORD score_save(UWORD score) {
     sram_highscore.signature = HIGHSCORE_SIGNATURE;
     sram_highscore.crc = calc_crc(score);
     sram_highscore.highscore = score;
+#if defined(REFLASH)
+    flash_save_data((void *)&sram_highscore, sizeof(sram_highscore));
+#endif
     return score;
 }
 

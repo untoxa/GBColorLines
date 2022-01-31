@@ -1,8 +1,10 @@
+#include "gbdk/platform.h"
+
 #include "sound_sampleplayer.h"
 #include "sound_samples.h"
 #include "sound_routines.h"
 
-void Routine0(unsigned char param, unsigned char ch, unsigned char tick) {
+void Routine0(unsigned char param, unsigned char ch, unsigned char tick) OLDCALL {
     ch; tick; // suppress warinigs
     const wave_sample_t * sample;
     if (tick) return;

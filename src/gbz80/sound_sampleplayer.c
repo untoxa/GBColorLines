@@ -4,8 +4,8 @@ UINT8 play_bank = 1;
 const UINT8 * play_sample = 0;
 UINT16 play_length = 0;
 
-void play_isr() __nonbanked __naked {
-    __asm
+void play_isr() NONBANKED NAKED {
+__asm
         ld hl, #_play_length    ; something left to play?
         ld a, (hl+)
         or (hl)
@@ -69,9 +69,9 @@ _wave_addr = _wave_addr + 1
         ld a, #100
         ld (#_hUGE_current_wave), a
         ret
-    __endasm;
+__endasm;
 }
 
-void set_sample(UINT8 bank, const UINT8 * sample, UINT16 length) __critical {
+void set_sample(UINT8 bank, const UINT8 * sample, UINT16 length) NONBANKED CRITICAL {
     play_bank = bank, play_sample = sample, play_length = length >> 4;
 }

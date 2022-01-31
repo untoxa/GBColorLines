@@ -51,7 +51,7 @@ static void music_update_data() {
     // play sound
     if (music_playing) hUGE_dosound();
 }
-void music_update() __naked {
+void music_update() NAKED {
 __asm
         push af
         push hl
@@ -90,7 +90,7 @@ void music_stop() {
 const UINT8 const FX_REG_SIZES[] = {5, 4, 5, 4, 3};
 const UINT8 const FX_ADDR_LO[]   = {0x10, 0x16, 0x1A, 0x20, 0x24};
 
-void sound_play(UBYTE channel, UINT8 mute_frames, ...) __naked {
+void sound_play(UBYTE channel, UINT8 mute_frames, ...) NAKED {
     channel; mute_frames;
 __asm
             ld      A, (#_sound_playing)
