@@ -4,7 +4,7 @@ UINT8 play_bank = 1;
 const UINT8 * play_sample = 0;
 UINT16 play_length = 0;
 
-void play_isr() NONBANKED NAKED {
+void play_isr(void) NONBANKED NAKED {
 #ifndef __INTELLISENSE__
 __asm
         ld hl, #_play_length    ; something left to play?
@@ -24,7 +24,7 @@ __asm
         ld (#0x2000), a
 
         xor a
-        ldh (_NR30_REG),a       
+        ldh (_NR30_REG),a
 
 _wave_addr = 0xFF30
         .rept 16
@@ -38,7 +38,7 @@ _wave_addr = _wave_addr + 1
         xor a
         ld (_NR30_REG), a
 
-        ld a, #0x80             
+        ld a, #0x80
         ldh (_NR30_REG),a
         ld a, #0xFE             ; length of wave
         ldh (_NR31_REG),a
@@ -47,7 +47,7 @@ _wave_addr = _wave_addr + 1
         xor a                   ; low freq bits are zero
         ldh (_NR33_REG),a
         ld a, #0xC7             ; start; no loop; high freq bits are 111
-        ldh (_NR34_REG),a       
+        ldh (_NR34_REG),a
 
         ld a, e                 ; restore bank
         ld (#0x2000), a

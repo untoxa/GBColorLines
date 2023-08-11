@@ -25,7 +25,7 @@ UBYTE lee_test_collision(UBYTE x, UBYTE y) {
 }
 
 
-void playfield_draw() {
+void playfield_draw(void) {
     for (UBYTE i = 0; i < (PLAYFIELD_HEIGHT * 2); i+=2) {
         set_bkg_tiles_blank(FIELD_OFFSET_X, FIELD_OFFSET_Y + i, 18, 2, field_row);
     }
@@ -35,16 +35,16 @@ void playfield_draw_item(UBYTE x, UBYTE y, UBYTE color) {
     UBYTE attr = color & 0x07u;
     UBYTE attributes[4] = {attr, attr, attr, attr};
     UBYTE tiles[4] = {(attr << 2) + 0x01, (attr << 2) + 0x03, (attr << 2) + 0x02, (attr << 2) + 0x04};
-    set_attributed_bkg_tiles(FIELD_OFFSET_X + (x << 1), FIELD_OFFSET_Y + (y << 1), 2, 2, tiles, attributes);    
+    set_attributed_bkg_tiles(FIELD_OFFSET_X + (x << 1), FIELD_OFFSET_Y + (y << 1), 2, 2, tiles, attributes);
 }
 
 void playfield_draw_hint_item(UBYTE x, UBYTE y, UBYTE color) {
-    if (preview_placement) { 
+    if (preview_placement) {
         UBYTE attr = color & 0x07u;
         UBYTE attributes[4] = {attr, attr, attr, attr};
         UBYTE tiles[4] = {(attr << 2) + 0x1d, (attr << 2) + 0x1f, (attr << 2) + 0x1e, (attr << 2) + 0x20};
         set_attributed_bkg_tiles(FIELD_OFFSET_X + (x << 1), FIELD_OFFSET_Y + (y << 1), 2, 2, tiles, attributes);
-    }    
+    }
 }
 
 UBYTE playfield_put_item(UWORD idx, UBYTE color) {
@@ -54,11 +54,11 @@ UBYTE playfield_put_item(UWORD idx, UBYTE color) {
 
     static UBYTE dx, dy;
     static lineprop_t h, v, d1, d2;
-    
-    h.x = idx % PLAYFIELD_WIDTH; 
-    h.y = idx / PLAYFIELD_HEIGHT; 
+
+    h.x = idx % PLAYFIELD_WIDTH;
+    h.y = idx / PLAYFIELD_HEIGHT;
     h.count = 1;
-    
+
     v = d1 = d2 = h;
 
     // draw
@@ -131,25 +131,25 @@ UWORD playfield_get_random_coord() {
     return (UWORD)(pf - playfield);
 }
 
-void playfield_refresh_preview() {
+void playfield_refresh_preview(void) {
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
         // put item color
 #ifdef NINTENDO
-        preview_items[i][1].props = preview_items[i][0].props = preview_colors[i]; 
+        preview_items[i][1].props = preview_items[i][0].props = preview_colors[i];
 #endif
         // put coord hint
-        UWORD idx = preview_coords[i];        
+        UWORD idx = preview_coords[i];
         if (idx < PLAYFIELD_SIZE) playfield_draw_hint_item(idx % PLAYFIELD_WIDTH, idx / PLAYFIELD_HEIGHT, preview_colors[i]);
     }
 }
 
-void playfield_randomize_preview() {
+void playfield_randomize_preview(void) {
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
         // put item color
         UBYTE color = myrand(&r7) + 1;
         preview_colors[i] = color;
         // put coord hint
-        UWORD idx = playfield_get_random_coord();        
+        UWORD idx = playfield_get_random_coord();
         preview_coords[i] = idx;
         if (idx < PLAYFIELD_SIZE) playfield[idx] = PREVIEW_FLAG;
     }
@@ -161,10 +161,10 @@ void playfield_process_animation(UBYTE anim) {
         playfield_anim++; playfield_anim &= ANIM_MASK;
     }
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
-        move_metasprite(preview_items[i], 
-                        (preview_colors[i] - 1) << 2, 
-                        (i << 1) + 4, 
-                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_PX_OFFSET_X + 143 + animation[(playfield_anim + (i << 1)) & ANIM_MASK], 
+        move_metasprite(preview_items[i],
+                        (preview_colors[i] - 1) << 2,
+                        (i << 1) + 4,
+                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_PX_OFFSET_X + 143 + animation[(playfield_anim + (i << 1)) & ANIM_MASK],
                         (FIELD_OFFSET_Y << 3) + DEVICE_SPRITE_PX_OFFSET_Y + 48 + (i << 4));
     }
     if (score != old_score) {
@@ -175,19 +175,19 @@ void playfield_process_animation(UBYTE anim) {
             score_display[i].dtile = (*pc) ? ascii_to_tile(*pc++) : 0x38u;
         }
         score_anim = 0;
-    } 
+    }
 
     if (score_anim < SCORE_ANIM_SIZE) {
-        move_metasprite(score_display, 
-                        0, 
-                        16, 
-                        (DEVICE_SPRITE_PX_OFFSET_X + (DEVICE_SCREEN_WIDTH - 1) * 8) - (score_len << 3), 
+        move_metasprite(score_display,
+                        0,
+                        16,
+                        (DEVICE_SPRITE_PX_OFFSET_X + (DEVICE_SCREEN_WIDTH - 1) * 8) - (score_len << 3),
                         DEVICE_SPRITE_PX_OFFSET_Y + score_animation[score_anim] - 16);
         score_anim++;
     }
 }
 
-UBYTE playfield_check_free_space() {
+UBYTE playfield_check_free_space(void) {
     for (UBYTE i = 0; i < PLAYFIELD_SIZE; i++)
         if ((playfield[i] & PREVIEW_MASK) == 0) return TRUE;
 
@@ -210,8 +210,8 @@ UBYTE playfield_put_random(UBYTE count, UBYTE color) {
                 exit = TRUE;
             }
         }
-        UBYTE score_delta = playfield_put_item((UWORD)(pf - playfield), (color) ? color : myrand(&r7) + 1); 
-        if (random_put_scores) score_add(score_delta);       
+        UBYTE score_delta = playfield_put_item((UWORD)(pf - playfield), (color) ? color : myrand(&r7) + 1);
+        if (random_put_scores) score_add(score_delta);
     }
 
     // pop sound
@@ -220,7 +220,7 @@ UBYTE playfield_put_random(UBYTE count, UBYTE color) {
     return playfield_check_free_space();
 }
 
-UBYTE playfield_put_previewed() {
+UBYTE playfield_put_previewed(void) {
     UBYTE not_put[PREVIEW_SIZE];
     UBYTE put_count = 0;
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
@@ -228,7 +228,7 @@ UBYTE playfield_put_previewed() {
         if ((idx < PLAYFIELD_SIZE) && ((playfield[idx] & PREVIEW_MASK) == 0)) {
             put_count++;
             UBYTE score_delta = playfield_put_item(idx, preview_colors[i]);
-            if (random_put_scores) score_add(score_delta);       
+            if (random_put_scores) score_add(score_delta);
             not_put[i] = 0;
         } else {
             not_put[i] = preview_colors[i];
@@ -236,7 +236,7 @@ UBYTE playfield_put_previewed() {
     }
 
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++)
-        if (not_put[i]) 
+        if (not_put[i])
             if (!playfield_put_random(1, not_put[i])) return FALSE;
 
     // pop sound

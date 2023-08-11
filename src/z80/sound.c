@@ -8,27 +8,27 @@ UBYTE sound_playing = TRUE;
 
 UBYTE sound_control = SOUND_ON | MUSIC_ON;
 
-void sound_init() {
+void sound_init(void) {
 }
 
 void toggle_sound_settings(UBYTE addend) {
-    sound_control += addend; sound_control &= (SOUND_ON | MUSIC_ON); 
+    sound_control += addend; sound_control &= (SOUND_ON | MUSIC_ON);
     if (sound_control & MUSIC_ON) music_play(); else music_stop();
     sound_playing = (sound_control & SOUND_ON);
 }
 
-void music_init() {
+void music_init(void) {
 }
 
-void music_update() {
+void music_update(void) {
 }
 
-void music_play() {
+void music_play(void) {
 }
 
-void music_stop() {
+void music_stop(void) {
 }
 
-void sound_play(UBYTE channel, UINT8 mute_frames, ...) {
+void sound_play(UBYTE channel, UINT8 mute_frames, ...) OLDCALL {
     channel; mute_frames;
 }

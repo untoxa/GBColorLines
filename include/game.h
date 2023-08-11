@@ -19,6 +19,6 @@
 extern myrand_state_t r7, r81;
 extern metasprite_t item[3];
 
-game_state_e game_run();
+game_state_e game_run(void);
 
 #endif

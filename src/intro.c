@@ -1,6 +1,6 @@
 #include "intro.h"
 
-game_state_e intro_run() {
+game_state_e intro_run(void) {
     // clear screen;
     clear_viewport();
 
@@ -14,7 +14,7 @@ game_state_e intro_run() {
     #ifdef CATSKULL_LOGO
     {
         UBYTE logo_attr[13*3];
-        for (UBYTE i = 0; i != sizeof(logo_attr); i++) logo_attr[i] = myrand(&r7) + 1; 
+        for (UBYTE i = 0; i != sizeof(logo_attr); i++) logo_attr[i] = myrand(&r7) + 1;
         set_attributed_bkg_tiles(FIELD_OFFSET_X + 4, 1, 13, 3, catskull_map, logo_attr);
     }
     #endif
@@ -26,9 +26,9 @@ game_state_e intro_run() {
             *pc = ascii_to_tile(*pc);
         }
 #if defined(NINTENDO)
-        set_bkg_tiles_blank(DEVICE_SCREEN_WIDTH - len, DEVICE_SCREEN_HEIGHT, len, 1, score_text); 
+        set_bkg_tiles_blank(DEVICE_SCREEN_WIDTH - len, DEVICE_SCREEN_HEIGHT, len, 1, score_text);
 #elif defined(SEGA)
-        set_bkg_tiles_blank(DEVICE_SCREEN_WIDTH - len, DEVICE_SCREEN_HEIGHT - 1, len, 1, score_text); 
+        set_bkg_tiles_blank(DEVICE_SCREEN_WIDTH - len, DEVICE_SCREEN_HEIGHT - 1, len, 1, score_text);
 #endif
     }
 
@@ -42,7 +42,7 @@ game_state_e intro_run() {
             case J_START:
 #if defined(GAMEGEAR)
             case J_A:
-#endif 
+#endif
                 clear_viewport();
                 wait_pad_up();
                 wait_vbl_done();
@@ -59,16 +59,16 @@ game_state_e intro_run() {
         // animate screen
         if (sys_time & 1) {
             playfield_anim++; playfield_anim &= ANIM_MASK;
-            UBYTE base = move_metasprite(start_msg, 
-                                         0, 
-                                         0, 
-                                         DEVICE_SPRITE_PX_OFFSET_X + ((DEVICE_SCREEN_WIDTH - START_MSG_WIDTH) << 2) + animation[playfield_anim], 
+            UBYTE base = move_metasprite(start_msg,
+                                         0,
+                                         0,
+                                         DEVICE_SPRITE_PX_OFFSET_X + ((DEVICE_SCREEN_WIDTH - START_MSG_WIDTH) << 2) + animation[playfield_anim],
                                          DEVICE_SPRITE_PX_OFFSET_Y + 88);
             for (UBYTE j = 0; j != TITLE_SIZE; j++) {
-                base += move_metasprite(title[j], 
-                                        0, 
-                                        base, 
-                                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_PX_OFFSET_X + 44 + (j << 4), 
+                base += move_metasprite(title[j],
+                                        0,
+                                        base,
+                                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_PX_OFFSET_X + 44 + (j << 4),
                                         DEVICE_SPRITE_PX_OFFSET_Y + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
             }
         }

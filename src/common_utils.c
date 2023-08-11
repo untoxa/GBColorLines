@@ -1,14 +1,14 @@
 #include "common_utils.h"
 
-void wait_pad_up() {
+void wait_pad_up(void) {
     if (joypad()) {
         do {
-            wait_vbl_done();        
+            wait_vbl_done();
         } while (joypad());
     }
 }
 
-void clear_screen() {
+void clear_screen(void) {
 #ifdef NINTENDO
     if (DEVICE_SUPPORTS_COLOR) {
         VBK_REG = 1;
@@ -19,8 +19,8 @@ void clear_screen() {
     fill_bkg_rect(0, 0, DEVICE_SCREEN_BUFFER_WIDTH, DEVICE_SCREEN_HEIGHT + 2, 0);
 }
 
-void clear_viewport() {
-    hide_sprites_range(0, MAX_HARDWARE_SPRITES);    
+void clear_viewport(void) {
+    hide_sprites_range(0, MAX_HARDWARE_SPRITES);
     clear_screen();
     scroll_reset();
 }

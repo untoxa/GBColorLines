@@ -19,7 +19,7 @@ extern const UBYTE animation[];
 extern UBYTE random_put_scores;
 extern UBYTE preview_placement;
 
-void playfield_draw();
+void playfield_draw(void);
 void playfield_draw_item(UBYTE x, UBYTE y, UBYTE color);
 
 inline UBYTE playfield_get(UBYTE x, UBYTE y) {
@@ -31,12 +31,12 @@ inline void playfield_set(UBYTE x, UBYTE y, UBYTE color) {
 
 UBYTE playfield_put_item(UWORD idx, UBYTE color);
 
-void playfield_refresh_preview();
-void playfield_randomize_preview();
+void playfield_refresh_preview(void);
+void playfield_randomize_preview(void);
 
 void playfield_process_animation(UBYTE anim);
 
 UBYTE playfield_put_random(UBYTE count, UBYTE color);
-UBYTE playfield_put_previewed();
+UBYTE playfield_put_previewed(void);
 
 #endif

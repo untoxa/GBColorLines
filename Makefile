@@ -2,7 +2,12 @@ SHELL := /bin/bash
 
 # If you move this project you can change the directory
 # to match your GBDK root directory (ex: GBDK_HOME = "C:/GBDK/"
-GBDK_HOME = ../../gbdk/
+ifndef GBDK_HOME
+GBDK_HOME = ../../gbdk-2020/build/gbdk/
+endif
+
+GBCPU = sm83
+
 LCC = $(GBDK_HOME)bin/lcc
 
 # Set platforms to build here, spaced separated. (These are in the separate Makefile.targets)
@@ -12,9 +17,9 @@ LCC = $(GBDK_HOME)bin/lcc
 TARGETS=gb pocket gg sms
 
 # Configure platform specific LCC flags here:
-LCCFLAGS_gb      = -Wl-klib/gbz80 -Wl-lhUGEDriver.lib -Wl-yt0x1B -Wl-yo4 -Wl-ya1 -Wm-yS -Wm-yc -Wm-yn"$(PROJECTNAME)"
+LCCFLAGS_gb      = -Wl-klib/sm83 -Wl-lhUGEDriver.lib -Wl-yt0x1B -Wl-yo4 -Wl-ya1 -Wm-yS -Wm-yc -Wm-yn"$(PROJECTNAME)"
 #LCCFLAGS_gb      = -Wl-klib/gbz80 -Wl-lhUGEDriver.lib -Wl-ltiny_flasher.lib -Wm-yS -Wm-yc -Wm-yn"$(PROJECTNAME)"
-LCCFLAGS_pocket  = -Wl-klib/gbz80 -Wl-lhUGEDriver.lib -Wl-yt0x1B -Wl-yo4 -Wl-ya1 -Wm-yS -Wm-yc -Wm-yn"$(PROJECTNAME)"
+LCCFLAGS_pocket  = -Wl-klib/sm83 -Wl-lhUGEDriver.lib -Wl-yt0x1B -Wl-yo4 -Wl-ya1 -Wm-yS -Wm-yc -Wm-yn"$(PROJECTNAME)"
 LCCFLAGS_sms     = -Wl-yo4 -Wm-yS -Wm-yS
 LCCFLAGS_gg      = -Wl-yo4 -Wm-yS -Wm-yS
 

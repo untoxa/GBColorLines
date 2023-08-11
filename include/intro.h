@@ -13,6 +13,6 @@
 #include "playfield.h"
 #include "sound.h"
 
-game_state_e intro_run();
+game_state_e intro_run(void);
 
 #endif

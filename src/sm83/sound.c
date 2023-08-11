@@ -16,19 +16,19 @@ UBYTE channel_pause[4];
 
 UBYTE sound_control = SOUND_ON | MUSIC_ON;
 
-void sound_init() {
+void sound_init(void) {
     NR52_REG = 0x80u;
     NR51_REG = 0xffu;
     NR50_REG = 0x77u;
 }
 
 void toggle_sound_settings(UBYTE addend) {
-    sound_control += addend; sound_control &= (SOUND_ON | MUSIC_ON); 
+    sound_control += addend; sound_control &= (SOUND_ON | MUSIC_ON);
     if (sound_control & MUSIC_ON) music_play(); else music_stop();
     sound_playing = (sound_control & SOUND_ON);
 }
 
-void music_init() {
+void music_init(void) {
     if (music_initialized) return;
     memset(channel_pause, 0, sizeof(channel_pause));
     hUGE_init(&BGM_MAIN);
@@ -36,22 +36,22 @@ void music_init() {
 }
 
 UINT8 ISR_counter = 0;
-static void music_update_data() {
+static void music_update_data(void) {
     play_isr();
     ISR_counter++; ISR_counter &= 3;
     if (ISR_counter) return;
-    
+
     // resume channel
     for (UBYTE i = HT_CH1; i <= HT_CH4; i++) {
         if (channel_pause[i]) {
-            if (--channel_pause[i]) continue; 
+            if (--channel_pause[i]) continue;
             if (music_playing) hUGE_mute_channel(i, HT_CH_PLAY);
         }
     }
     // play sound
     if (music_playing) hUGE_dosound();
 }
-void music_update() NAKED {
+void music_update(void) NAKED {
 #ifndef __INTELLISENSE__
 __asm
         push af
@@ -67,7 +67,7 @@ __asm
 1$:
         ldh a, (_STAT_REG)
         and #STATF_BUSY
-        jr nz, 1$        
+        jr nz, 1$
         pop af
         reti
 __endasm;
@@ -75,14 +75,14 @@ __endasm;
 }
 ISR_NESTED_VECTOR(VECTOR_TIMER, music_update)
 
-void music_play() {
+void music_play(void) {
     music_init();
     for (UBYTE i = HT_CH1; i <= HT_CH4; i++)
         hUGE_mute_channel(i, HT_CH_PLAY);
     music_playing = TRUE;
 }
 
-void music_stop() {
+void music_stop(void) {
     music_playing = FALSE;
     music_init();
     for (UBYTE i = HT_CH1; i <= HT_CH4; i++)
@@ -101,10 +101,10 @@ __asm
             ret     Z
 
             push    BC
-            
+
             ldhl    SP, #4
-            ld      B, #0 
-            ld      A, (HL+)           
+            ld      B, #0
+            ld      A, (HL+)
             ld      C, A        ; BC = channel
 
             ld      E, (HL)
@@ -124,11 +124,11 @@ __asm
             ld      HL, #_FX_REG_SIZES
             add     HL, BC
             ld      E, (HL)     ; E = FX_REG_SIZES[channel]
-            
+
             ld      HL, #_FX_ADDR_LO
             add     HL, BC
             ld      C, (HL)     ; BC = 0xFF00 + FX_ADDR_LO[channel]
-            
+
             lda     HL, 6(SP) // varargs
 1$:
             ld      A, (HL+)
@@ -136,7 +136,7 @@ __asm
             ldh     (C), A
             inc     C
             dec     E
-            
+
             jr      NZ, 1$
 2$:
             pop     BC

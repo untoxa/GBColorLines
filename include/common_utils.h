@@ -7,8 +7,8 @@
 #include "scroller.h"
 #include "sound.h"
 
-void wait_pad_up();
-void clear_screen();
-void clear_viewport();
+void wait_pad_up(void);
+void clear_screen(void);
+void clear_viewport(void);
 
 #endif

@@ -13,6 +13,6 @@
 #include "playfield.h"
 #include "sound.h"
 
-game_state_e over_run();
+game_state_e over_run(void);
 
 #endif

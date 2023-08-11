@@ -2,7 +2,7 @@
 
 #include <rand.h>
 
-void randomize() {
+void randomize(void) {
 #if defined(NINTENDO)
     initarand(DIV_REG);
 #elif defined(SEGA)

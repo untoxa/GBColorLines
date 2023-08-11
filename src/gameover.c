@@ -1,6 +1,6 @@
 #include "gameover.h"
 
-game_state_e over_run() {
+game_state_e over_run(void) {
     // clear screen;
     clear_viewport();
 
@@ -21,7 +21,7 @@ game_state_e over_run() {
     for (UBYTE *pc = tmp_score_text; (*pc); pc++) {
         *pc = ascii_to_tile(*pc);
     }
-    set_bkg_tiles_blank(((DEVICE_SCREEN_WIDTH - len) >> 1) + 1, 15, len, 1, tmp_score_text); 
+    set_bkg_tiles_blank(((DEVICE_SCREEN_WIDTH - len) >> 1) + 1, 15, len, 1, tmp_score_text);
     scroll_set_pos((len & 1) ? 4 : 8);
 
 #if defined(NINTENDO)
@@ -46,7 +46,7 @@ game_state_e over_run() {
             default:
 #if defined(SEGA)
                 clear_viewport();
-#endif 
+#endif
                 wait_pad_up();
                 wait_vbl_done();
                 HIDE_SPRITES; HIDE_BKG;
@@ -60,16 +60,16 @@ game_state_e over_run() {
             playfield_anim++; playfield_anim &= ANIM_MASK;
             UBYTE base = 0;
             for (UBYTE j = 0; j != OVER_SIZE; j++) {
-                base += move_metasprite(over[j], 
-                                        0, 
-                                        base, 
-                                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_PX_OFFSET_X + 52 + (j << 4), 
+                base += move_metasprite(over[j],
+                                        0,
+                                        base,
+                                        (FIELD_OFFSET_X << 3) + DEVICE_SPRITE_PX_OFFSET_X + 52 + (j << 4),
                                         DEVICE_SPRITE_PX_OFFSET_Y + 48 + (animation[(playfield_anim + (j << 1)) & ANIM_MASK] << 1));
             }
         }
 
 #if defined(SEGA)
-    while (VCOUNTER != (SCROLL_Y_POS + (DEVICE_SCREEN_Y_OFFSET * 8))); 
+    while (VCOUNTER != (SCROLL_Y_POS + (DEVICE_SCREEN_Y_OFFSET * 8)));
     __WRITE_VDP_REG(VDP_RSCX, -scroll_get_pos());
     while (VCOUNTER != (SCROLL_Y_POS + (DEVICE_SCREEN_Y_OFFSET * 8) + 16));
     __WRITE_VDP_REG(VDP_RSCX, 0);

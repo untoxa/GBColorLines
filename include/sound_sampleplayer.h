@@ -7,7 +7,7 @@ extern UINT8 play_bank;
 extern const UINT8 * play_sample;
 extern UINT16 play_length;
 
-void set_sample(UINT8 bank, const UINT8 * sample, UINT16 length) NONBANKED; 
-void play_isr() NONBANKED;
+void set_sample(UINT8 bank, const UINT8 * sample, UINT16 length) NONBANKED;
+void play_isr(void) NONBANKED;
 
 #endif

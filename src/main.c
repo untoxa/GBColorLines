@@ -21,7 +21,7 @@
 
 game_state_e game_state = game_intro;
 
-void main() {
+void main(void) {
     DISPLAY_OFF;
 
     sound_init();
@@ -40,7 +40,7 @@ void main() {
     toggle_sound_settings(0);
 
 #if defined(NINTENDO)
-    OBP1_REG = OBP0_REG = DMG_PALETTE(DMG_WHITE, DMG_LITE_GRAY, DMG_WHITE, DMG_BLACK); 
+    OBP1_REG = OBP0_REG = DMG_PALETTE(DMG_WHITE, DMG_LITE_GRAY, DMG_WHITE, DMG_BLACK);
     BGP_REG = DMG_PALETTE(DMG_WHITE, DMG_LITE_GRAY, DMG_DARK_GRAY, DMG_BLACK);
     if (DEVICE_SUPPORTS_COLOR) {
         set_bkg_palette(0, 8, background_palettes);
@@ -84,7 +84,7 @@ void main() {
 #endif
 
     memcpy(item, item_defaults, sizeof(item));
-    for (UBYTE i = 0; i != PREVIEW_SIZE; i++) 
+    for (UBYTE i = 0; i != PREVIEW_SIZE; i++)
         memcpy(preview_items[i], item_defaults, sizeof(preview_items[0]));
 
     memcpy(score_display, score_display_defaults, sizeof(score_display));

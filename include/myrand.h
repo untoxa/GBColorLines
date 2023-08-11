@@ -9,7 +9,7 @@ typedef struct {
     UINT8 previous, modulus, maxvalue;
 } myrand_state_t;
 
-void randomize();
+void randomize(void);
 UINT8 myrand(myrand_state_t * state);
 void myrand_init(UINT8 avalue, myrand_state_t * state);
 

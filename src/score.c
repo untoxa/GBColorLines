@@ -2,11 +2,11 @@
 #include "graphics.h"
 
 UBYTE score_text[16] = {
-    ASCII_TO_TILE('B'), ASCII_TO_TILE('E'), ASCII_TO_TILE('S'), ASCII_TO_TILE('T'), ASCII_TO_TILE(':'), 
+    ASCII_TO_TILE('B'), ASCII_TO_TILE('E'), ASCII_TO_TILE('S'), ASCII_TO_TILE('T'), ASCII_TO_TILE(':'),
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-UWORD score, old_score; 
+UWORD score, old_score;
 UWORD highscore = 0;
 UBYTE score_len;
 
@@ -28,15 +28,15 @@ inline UBYTE calc_crc(UWORD crc) {
     return 0x55 ^ (UBYTE)crc ^ (UBYTE)(crc >> 8);
 }
 
-UWORD score_load() {
+UWORD score_load(void) {
 #if defined(REFLASH)
     flash_restore_data((void *)&sram_highscore, sizeof(sram_highscore));
 #else
     SWITCH_RAM(0);
 #endif
-    if ((sram_highscore.signature != HIGHSCORE_SIGNATURE) || 
+    if ((sram_highscore.signature != HIGHSCORE_SIGNATURE) ||
        (sram_highscore.crc != calc_crc(sram_highscore.highscore)))  {
-        sram_highscore.signature = HIGHSCORE_SIGNATURE; 
+        sram_highscore.signature = HIGHSCORE_SIGNATURE;
         sram_highscore.highscore = 0;
         sram_highscore.crc = calc_crc(0);
         return 0;
@@ -58,9 +58,9 @@ UBYTE score_add(UBYTE addend) {
     if (!addend) return FALSE;
     // add score
     if (addend > 8) {
-        score += addend * 3; 
+        score += addend * 3;
     } else if (addend > 6) {
-        score += addend * 2; 
+        score += addend * 2;
     } else {
         score += addend;
     }

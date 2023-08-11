@@ -10,12 +10,12 @@ extern UBYTE sound_playing;
 
 extern UBYTE channel_pause[4];
 
-void sound_init();
+void sound_init(void);
 
-void music_play();
-void music_stop();
+void music_play(void);
+void music_stop(void);
 
-void music_update();
+void music_update(void);
 
 #if ENABLE_CURSOR_SOUND != 0
     #if defined(NINTENDO)
