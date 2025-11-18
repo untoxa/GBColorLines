@@ -7,11 +7,11 @@
 UWORD queue[MAX_QUEUE_LENGTH]; 
 UWORD queue_head, queue_tail;
 
-inline void queue_reset() {
+inline void queue_reset(void) {
     queue_head = queue_tail = 0;
 }
 
-inline UBYTE queue_empty() { 
+inline UBYTE queue_empty(void) { 
     return (queue_head == queue_tail); 
 }
 
@@ -24,7 +24,7 @@ inline UBYTE queue_push(UWORD data) {
     return FALSE;
 }
 
-inline UWORD queue_pop() {
+inline UWORD queue_pop(void) {
     if (++queue_tail == MAX_QUEUE_LENGTH) queue_tail = 0;
     return queue[queue_tail];
 }

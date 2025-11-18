@@ -112,7 +112,7 @@ UBYTE playfield_put_item(UWORD idx, UBYTE color) {
     return score;
 }
 
-UWORD playfield_get_random_coord() {
+UWORD playfield_get_random_coord(void) {
     // get new coords
     UBYTE r = myrand(&r81) + 1;
     UBYTE exit = FALSE;
