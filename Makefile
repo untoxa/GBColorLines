@@ -5,10 +5,11 @@ SHELL := /bin/bash
 ifndef GBDK_HOME
 GBDK_HOME = ../../gbdk-2020/build/gbdk/
 endif
+GBDK_HOME_UNIX := $(subst ',,$(subst \,/,'$(GBDK_HOME)'))
 
 GBCPU = sm83
 
-LCC = $(GBDK_HOME)bin/lcc
+LCC = $(GBDK_HOME_UNIX)/bin/lcc
 
 # Set platforms to build here, spaced separated. (These are in the separate Makefile.targets)
 # They can also be built/cleaned individually: "make gg" and "make gg-clean"

@@ -21,6 +21,8 @@
 
 game_state_e game_state = game_intro;
 
+extern uint8_t buffer[];
+
 void main(void) {
     DISPLAY_OFF;
 
@@ -60,7 +62,6 @@ void main(void) {
     set_bkg_palette(0, 1, background_palettes);
     set_sprite_palette(0, 1, sprite_palettes);
 
-    uint8_t * buffer = (uint8_t *)0xD000;
     uint8_t ntiles;
 
     ntiles = gb_decompress(bkg_tiles, buffer) >> 4;
