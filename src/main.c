@@ -1,9 +1,11 @@
 #include <gbdk/platform.h>
 #include <gbdk/metasprites.h>
 #include <gbdk/gbdecompress.h>
+#include <rand.h>
 
 #include <string.h>
 #include <stdlib.h>
+#include <rand.h>
 
 #include "game_types.h"
 #include "common_utils.h"
@@ -12,7 +14,6 @@
 #include "playfield.h"
 #include "sound.h"
 #include "graphics.h"
-#include "myrand.h"
 
 // game states:
 #include "intro.h"
@@ -28,7 +29,8 @@ void main(void) {
 
     sound_init();
 
-    HIDE_SPRITES; HIDE_BKG;
+    HIDE_BKG;
+    HIDE_SPRITES;
     SPRITES_8x16;
 
 #if defined(NINTENDO)
@@ -93,8 +95,11 @@ void main(void) {
     ENABLE_RAM;
     highscore = score_load();
 
-    randomize();
-    myrand_init(7, &r7);
+#if defined(NINTENDO)
+    initrand(DIV_REG);
+#elif defined(SEGA)
+    initrand(sys_time);
+#endif
 
     DISPLAY_ON;
 

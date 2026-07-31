@@ -1,15 +1,14 @@
 #include <gbdk/platform.h>
 
+#include <rand.h>
+
 #include "scroller.h"
-#include "myrand.h"
 #include "score.h"
 #include "graphics.h"
 
 extern game_state_e game_state;
 
 extern const UBYTE animation[];
-
-extern myrand_state_t r7;
 
 #ifdef CATSKULL_LOGO
 #define PUBLISHER_TEXT "PUBLISHED BY CATSKULL GAMES. "
@@ -78,7 +77,7 @@ UBYTE scroll_get_pos(void) {
 void scroll_process(void) {
     if ((scroll_pos_x & 0x07) == 0) {
         if (*scroll_text_ptr == 0) scroll_text_ptr = scroll_text;
-        set_attributed_bkg_tile_xy(((scroll_pos_x >> 3) + DEVICE_SCREEN_WIDTH) & 0x1f, 16, ascii_to_tile(*scroll_text_ptr), myrand(&r7) + 1);
+        set_attributed_bkg_tile_xy(((scroll_pos_x >> 3) + DEVICE_SCREEN_WIDTH) & 0x1f, 16, ascii_to_tile(*scroll_text_ptr), (rand() % 7) + 1);
         scroll_text_ptr++;
     }
     scroll_pos_x++; scroll_pos_y = animation[(scroll_pos_x >> 1) & ANIM_MASK];

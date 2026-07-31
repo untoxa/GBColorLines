@@ -1,3 +1,5 @@
+#include <rand.h>
+
 #include "intro.h"
 
 game_state_e intro_run(void) {
@@ -14,7 +16,7 @@ game_state_e intro_run(void) {
     #ifdef CATSKULL_LOGO
     {
         UBYTE logo_attr[13*3];
-        for (UBYTE i = 0; i != sizeof(logo_attr); i++) logo_attr[i] = myrand(&r7) + 1;
+        for (UBYTE i = 0; i != sizeof(logo_attr); i++) logo_attr[i] = (rand() % 7)  + 1;
         set_attributed_bkg_tiles(FIELD_OFFSET_X + 4, 1, 13, 3, catskull_map, logo_attr);
     }
     #endif

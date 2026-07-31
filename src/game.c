@@ -1,6 +1,6 @@
-#include "game.h"
+#include <rand.h>
 
-myrand_state_t r7, r81;
+#include "game.h"
 
 metasprite_t item[3];
 
@@ -49,9 +49,11 @@ game_state_e game_run(void) {
     score = 0; old_score = 1;
 
     // init random generators
-    randomize();
-    myrand_init(7, &r7);
-    myrand_init(81, &r81);
+#if defined(NINTENDO)
+    initrand(DIV_REG);
+#elif defined(SEGA)
+    initrand(sys_time);
+#endif
 
     // clear playfield
     memset(playfield, 0, sizeof(playfield));
@@ -82,24 +84,19 @@ game_state_e game_run(void) {
         joy = joypad();
 
         if (joy != joy_old) {
-            switch (joy) {
-                case J_LEFT:
+            if (joy & J_LEFT) {
                     if (cursor_x) cursor_x--; else cursor_x = PLAYFIELD_WIDTH - 1;
                     if ((!selected) && ((sound_control & MUSIC_ON) == 0)) SOUND_CURSOR;
-                    break;
-                case J_RIGHT:
+            } else if (joy & J_RIGHT) {
                     if (cursor_x < (PLAYFIELD_WIDTH - 1)) cursor_x++; else cursor_x = 0;
                     if ((!selected) && ((sound_control & MUSIC_ON) == 0)) SOUND_CURSOR;
-                    break;
-                case J_UP:
+            } else if (joy & J_UP) {
                     if (cursor_y) cursor_y--; else cursor_y = PLAYFIELD_HEIGHT - 1;
                     if ((!selected) && ((sound_control & MUSIC_ON) == 0)) SOUND_CURSOR;
-                    break;
-                case J_DOWN:
+            } else if (joy & J_DOWN) {
                     if (cursor_y < (PLAYFIELD_HEIGHT - 1)) cursor_y++; else cursor_y = 0;
                     if ((!selected) && ((sound_control & MUSIC_ON) == 0)) SOUND_CURSOR;
-                    break;
-                case J_A: {
+            } else if (joy & J_A) {
                     if (selected) {
                         if (playfield_get(cursor_x, cursor_y) == 0) {
                             path_length = lee_find_path(selected_x, selected_y, cursor_x, cursor_y);
@@ -163,27 +160,24 @@ game_state_e game_run(void) {
                             playfield_draw_item(selected_x, selected_y, 0);
                         }
                     }
-                    break;
-                }
-                case J_B:
+            } else if (joy & J_B) {
                     if (!playfield_put_previewed()) {
                         wait_vbl_done();
                         HIDE_SPRITES; HIDE_BKG;
                         return game_over;
                     }
                     playfield_randomize_preview();
-                    break;
+            }
 #ifndef MASTERSYSTEM
-                case J_START:
+            else if (joy & J_START) {
                     if (score_anim == SCORE_ANIM_SIZE) score_anim = 0;
-                    break;
+            }
 #endif
 #ifdef NINTENDO
-                case J_SELECT:
+            else if (joy & J_SELECT) {
                     toggle_sound_settings(1);
-                    break;
-#endif
             }
+#endif
             joy_old = joy;
         }
 

@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
+#include <rand.h>
 
 #include "playfield.h"
 #include "score.h"
@@ -114,7 +115,7 @@ UBYTE playfield_put_item(UWORD idx, UBYTE color) {
 
 UWORD playfield_get_random_coord(void) {
     // get new coords
-    UBYTE r = myrand(&r81) + 1;
+    UBYTE r = (rand() % 81) + 1;
     UBYTE exit = FALSE;
     UBYTE * pf = playfield;
     while (TRUE) {
@@ -146,7 +147,7 @@ void playfield_refresh_preview(void) {
 void playfield_randomize_preview(void) {
     for (UBYTE i = 0; i != PREVIEW_SIZE; i++) {
         // put item color
-        UBYTE color = myrand(&r7) + 1;
+        UBYTE color = (rand() % 7) + 1;
         preview_colors[i] = color;
         // put coord hint
         UWORD idx = playfield_get_random_coord();
@@ -196,7 +197,7 @@ UBYTE playfield_check_free_space(void) {
 
 UBYTE playfield_put_random(UBYTE count, UBYTE color) {
     for (UBYTE i = 0; i != count; i++) {
-        UBYTE r = myrand(&r81) + 1;
+        UBYTE r = (rand() % 81) + 1;
         UBYTE exit = FALSE;
         UBYTE * pf = playfield;
         while (TRUE) {
@@ -210,7 +211,7 @@ UBYTE playfield_put_random(UBYTE count, UBYTE color) {
                 exit = TRUE;
             }
         }
-        UBYTE score_delta = playfield_put_item((UWORD)(pf - playfield), (color) ? color : myrand(&r7) + 1);
+        UBYTE score_delta = playfield_put_item((UWORD)(pf - playfield), (color) ? color : (rand() % 7) + 1);
         if (random_put_scores) score_add(score_delta);
     }
 
